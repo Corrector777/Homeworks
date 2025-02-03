@@ -13,21 +13,35 @@
 # - Если хотя бы одно нарушено: "Ошибка: [описание проблемы]" (указать первую обнаруженную ошибку в порядке проверки).  
 
 
-amount = 100000
-operation_type = 'оплата'  
+amount = 90000
+operation_type = 'перевод'  
 fee = 700  
   
-if 0 >= amount or amount > 100000:
-    print('Ошибка: недопустимая сумма')
+# if 0 >= amount or amount > 100000:
+#     print('Ошибка: недопустимая сумма')
 
-elif operation_type.lower() not in ['перевод', 'оплата']:
+# elif operation_type.lower() not in ['перевод', 'оплата']:
+#     print('Ошибка: неверный тип операции')
+
+# elif operation_type == 'перевод' and fee > (amount / 100 * 5):
+#     print('Ошибка: комиссия превышает 5%')
+
+# elif operation_type == 'оплата' and (amount % 100) != 0:
+#     print('Ошибка: не кратно 100')
+
+# else:
+#     print('транзакция разрешена')
+
+
+if operation_type.lower() == 'перевод' or 'оплата':
+    if 0 >= amount or amount > 100000:
+        print('Ошибка: недопустимая сумма')
+    elif operation_type == 'перевод' and fee > (amount / 100 * 5):
+        print('Ошибка: комиссия превышает 5%')
+    elif operation_type == 'оплата' and (amount % 100) != 0:
+        print('Ошибка: не кратно 100')
+    else:
+        print('транзакция разрешена')
+else:
     print('Ошибка: неверный тип операции')
 
-elif operation_type == 'перевод' and fee > (amount / 100 * 5):
-    print('Ошибка: комиссия превышает 5%')
-
-elif operation_type == 'оплата' and (amount % 100) != 0:
-    print('Ошибка: не кратно 100')
-
-else:
-    print('транзакция разрешена')
