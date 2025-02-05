@@ -58,22 +58,73 @@
 
 # Напишите код, который определяет, активирован ли код, и выводит номер условия, которое было выполнено. Если ни одно не выполнено или выполнено несколько — вывести "Отказ".  
 
-A = False
-B = False
-C = False
-D = False 
-cond1 = A and B or (C and D)  
-cond2 = (A != D) and (B == C)   
-cond3 = not (A or C) and (B or D)           
+# A = False
+# B = False
+# C = False
+# D = False 
+# cond1 = A and B or (C and D)  
+# cond2 = (A != D) and (B == C)   
+# cond3 = not (A or C) and (B or D)           
 
-count = cond1 + cond2 + cond3
-print(count)
-if count == 1:
-    if A and B or (C and D):
-        print('условие 1')
-    elif (A != D) and (B == C):     # Вот тут во входных данных может быть засада!!!!
-        print('условие 2')
-    elif not (A or C) and (B or D):
-        print('условие 3')
+# count = cond1 + cond2 + cond3
+# print(count)
+# if count == 1:
+#     if A and B or (C and D):
+#         print('условие 1')
+#     elif (A != D) and (B == C):     # Вот тут во входных данных может быть засада!!!!
+#         print('условие 2')
+#     elif not (A or C) and (B or D):
+#         print('условие 3')
+# else:
+#     print('отказ')
+
+
+# _________________________________________
+#### Задание 3: Генератор сложного пароля  
+
+# Условие:  
+# Пользователь вводит пароль. Проверьте его безопасность по критериям:  
+# 1. Длина ≥ 8 символов.  
+# 2. Содержит хотя бы одну цифру.  
+# 3. Содержит хотя бы одну заглавную и одну строчную букву.  
+# 4. Содержит спецсимвол из набора !@#$%^&*.  
+
+# Вывод:  
+# - Если пароль соответствует всем критериям: "Безопасный пароль".  
+# - Если не соответствует: перечислить все нарушения через запятую в порядке проверки.  
+
+# Пример:  
+  
+# Введите пароль: Pass123  
+# Нарушения: длина < 8, отсутствует спецсимвол  
+#_______________________________________________
+  
+password = input('Password:')
+message = 'Безопасный пароль'
+error_msg_list = []  # Задаю пустой список для последующего добавления элементов(строк с ошибками).
+# P.S. Можно было и через счетчик и строкой,но списки нравятся больше
+
+# определим в переменные наличие/отсутствие в пароле цифр, спецсимволов, верхнего/нижнего регистра
+upper_char = any(char.isupper() for char in password)
+lower_char = any(char.islower() for char in password)
+digit = any(char.isdigit() for char in password)
+
+#  создадим список подходящих спецсимволов
+special_chars_list = ['!', '@', '$', '%', '&', '*', '(', ')', '_', '+', '=', '-', '`', '~ ', '[', ']', '\'', '{', '}', '|']
+special_char = any(char in special_chars_list for char in password)
+
+# Осуществляем проверки с помощью условных конструкций
+if len(password) < 8:
+    error_msg_list.append('длина < 8') 
+if not upper_char:
+    error_msg_list.append('нет заглавных букв')
+if not lower_char:
+    error_msg_list.append('нет строчных букв')
+if not digit:
+    error_msg_list.append('нет цифр')
+if not special_char:
+    error_msg_list.append('нет спецсимволов')
+if error_msg_list:  # Если в всписке не пусто(ошибки добавились), то выводим ошибки в строку через запятую без последней запятой
+    print(f'У нас следующие проблемы: {', '.join(error_msg_list)}')
 else:
-    print('отказ')
+    print("Password is safety")   
