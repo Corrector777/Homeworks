@@ -99,32 +99,122 @@
 # Нарушения: длина < 8, отсутствует спецсимвол  
 #_______________________________________________
   
-password = input('Password:')
-message = 'Безопасный пароль'
-error_msg_list = []  # Задаю пустой список для последующего добавления элементов(строк с ошибками).
-# P.S. Можно было и через счетчик и строкой,но списки нравятся больше
+# password = input('Password:')
+# message = 'Безопасный пароль'
+# error_msg_list = []  # Задаю пустой список для последующего добавления элементов(строк с ошибками).
+# # P.S. Можно было и через счетчик и строкой,но списки нравятся больше
 
-# определим в переменные наличие/отсутствие в пароле цифр, спецсимволов, верхнего/нижнего регистра
-upper_char = any(char.isupper() for char in password)
-lower_char = any(char.islower() for char in password)
-digit = any(char.isdigit() for char in password)
+# # определим в переменные наличие/отсутствие в пароле цифр, спецсимволов, верхнего/нижнего регистра
+# upper_char = any(char.isupper() for char in password)
+# lower_char = any(char.islower() for char in password)
+# digit = any(char.isdigit() for char in password)
 
-#  создадим список подходящих спецсимволов
-special_chars_list = ['!', '@', '$', '%', '&', '*', '(', ')', '_', '+', '=', '-', '`', '~ ', '[', ']', '\'', '{', '}', '|']
-special_char = any(char in special_chars_list for char in password)
+# #  создадим список подходящих спецсимволов
+# special_chars_list = ['!', '@', '$', '%', '&', '*', '(', ')', '_', '+', '=', '-', '`', '~ ', '[', ']', '\'', '{', '}', '|']
+# special_char = any(char in special_chars_list for char in password)
 
-# Осуществляем проверки с помощью условных конструкций
-if len(password) < 8:
-    error_msg_list.append('длина < 8') 
-if not upper_char:
-    error_msg_list.append('нет заглавных букв')
-if not lower_char:
-    error_msg_list.append('нет строчных букв')
-if not digit:
-    error_msg_list.append('нет цифр')
-if not special_char:
-    error_msg_list.append('нет спецсимволов')
-if error_msg_list:  # Если в всписке не пусто(ошибки добавились), то выводим ошибки в строку через запятую без последней запятой
-    print(f'У нас следующие проблемы: {', '.join(error_msg_list)}')
-else:
-    print("Password is safety")   
+# # Осуществляем проверки с помощью условных конструкций
+# if len(password) < 8:
+#     error_msg_list.append('длина < 8') 
+# if not upper_char:
+#     error_msg_list.append('нет заглавных букв')
+# if not lower_char:
+#     error_msg_list.append('нет строчных букв')
+# if not digit:
+#     error_msg_list.append('нет цифр')
+# if not special_char:
+#     error_msg_list.append('нет спецсимволов')
+# if error_msg_list:  # Если в всписке не пусто(ошибки добавились), то выводим ошибки в строку через запятую без последней запятой
+#     print(f'У нас следующие проблемы: {', '.join(error_msg_list)}')
+# else:
+#     print("Password is safety")   
+
+
+# ____________________________________________
+#### Задание 4: Алгоритм экстренной эвакуации  
+# Условие:  
+# Напишите код для системы управления зданием, который определяет статус эвакуации на основе данных:  
+# - temperature (int) — температура в °C.  
+# - co2 (int) — уровень CO2 в ppm.  
+# - alarm (bool) — активирована ли тревога.  
+
+# Правила:  
+# 1. Если тревога активирована (`alarm=True`): "Эвакуация: тревога".  
+# 2. Если температура ≥ 50 или CO2 ≥ 2000: "Эвакуация: опасные условия".  
+# 3. Если температура ≥ 40 и CO2 ≥ 1000: "Предупреждение: возможна эвакуация".  
+# 4. Если ни одно условие не выполнено: "Норма".  
+
+# Приоритет правил: 1 > 2 > 3 > 4.
+# flag = True   # флаг для отладки некорретных значений темп и Со2
+# question = 'да'   # флаг для цикла (можно и на булевых и как угодно)
+# while True:
+#     if question == 'да':
+#         alarm = input('Активировать тревогу(введите только: да/нет)')
+#         if alarm.lower() == 'да' or alarm.lower() == 'нет':  # исключаем возможность любого иного ввода, кроме необходимого
+#             try:  # отлавливаем ошибку по введенному значению(только целочисленные значения)
+#                 temp = int(input('введи температуру: '))
+#                 co2 = int(input('введи уровень Co2: '))
+#             except (TypeError, ValueError):
+#                 flag = False  # в случае исключения, меняем флаг и блокируем продолжение программы.Цикл идет по новому кругу 
+#                 print('type integer only!!! Once again')
+#             print()
+
+#             if flag:
+#                 if alarm.lower() == 'да':
+#                     print("Эвакуация: тревога")
+#                 elif (temp >= 50 or co2 >= 2000):
+#                     print("Эвакуация: опасные условия")
+#                 elif (temp >= 40 or co2 >= 1000):
+#                     print("Предупреждения: возможна эвакуация")
+#                 else:
+#                     print('норма')
+#                 print('________________')
+
+#                 question = input("Продолжим? Ответь 'да' или 'нет':")
+
+#     elif question.lower() == 'нет':
+#         print('До скорых встреч')
+#         break         
+#     else:
+#         print('некорректный ответ')
+#         question = input("Продолжим? Ответь 'да' или 'нет':")
+
+# ________________________________________
+# #### Задание 5: Оптимизация тернарным оператором  
+# Условие:  
+# Дана переменная:  
+# score = -5
+  
+# Напишите один тернарный оператор, который преобразует score в оценку по правилам:  
+# - 90-100 → "A"  
+# - 80-89 → "B"  
+# - 70-79 → "C"  
+# - 60-69 → "D"  
+# - 0-59 → "F"  
+# - Если score не в диапазоне 0-100 → "Ошибка".  
+
+# Ограничение: Нельзя использовать if-elif-else, только тернарные операторы.
+question_flag = True
+while True:
+    count_flag = True 
+    if question_flag:
+        try:
+            score = int(input('Enter your count: '))
+        except ValueError:
+            print('Только числа')
+            count_flag = False
+        if count_flag:
+            print('A' if 100 >= score >= 90 else 'B' if 89 >= score >= 80 else 'C' if 79 >= score >= 70 else "D" if 69 >= score >= 60 else 'F' if 59 >= score >= 0 else 'Ошибка')
+            question = input('продолжим(да/нет)?: ')
+            question_flag = False
+
+    elif question.lower() == 'да':
+        question_flag = True    
+    elif question.lower() == 'нет':
+        print('До скорых встреч')
+        break         
+    else:
+        question_flag = False
+        print('некорректный ответ')
+        question = input('продолжим(да/нет)?: ')
+
