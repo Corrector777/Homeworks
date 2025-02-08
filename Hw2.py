@@ -99,35 +99,35 @@
 # Нарушения: длина < 8, отсутствует спецсимвол  
 #_______________________________________________
   
-# password = input('Password:')
-# message = 'Безопасный пароль'
-# error_msg_list = []  # Задаю пустой список для последующего добавления элементов(строк с ошибками).
-# # P.S. Можно было и через счетчик и строкой,но списки нравятся больше
+password = input('Password:')
+message = 'Безопасный пароль'
+error_msg_list = []  # Задаю пустой список для последующего добавления элементов(строк с ошибками).
+# P.S. Можно было и через счетчик и строкой,но списки нравятся больше
 
-# # определим в переменные наличие/отсутствие в пароле цифр, спецсимволов, верхнего/нижнего регистра
-# upper_char = any(char.isupper() for char in password)
-# lower_char = any(char.islower() for char in password)
-# digit = any(char.isdigit() for char in password)
+# определим в переменные наличие/отсутствие в пароле цифр, спецсимволов, верхнего/нижнего регистра
+upper_char = any(char.isupper() for char in password)
+lower_char = any(char.islower() for char in password)
+digit = any(char.isdigit() for char in password)
 
-# #  создадим список подходящих спецсимволов
-# special_chars_list = ['!', '@', '$', '%', '&', '*', '(', ')', '_', '+', '=', '-', '`', '~ ', '[', ']', '\'', '{', '}', '|']
-# special_char = any(char in special_chars_list for char in password)
+#  создадим список подходящих спецсимволов
+special_chars_list = ['!', '@', '$', '%', '&', '#', '*', '(', ')', '_', '+', '=', '-', '`', '~ ', '[', ']', '\'', '{', '}', '|']
+special_char = any(char in special_chars_list for char in password)
 
-# # Осуществляем проверки с помощью условных конструкций
-# if len(password) < 8:
-#     error_msg_list.append('длина < 8') 
-# if not upper_char:
-#     error_msg_list.append('нет заглавных букв')
-# if not lower_char:
-#     error_msg_list.append('нет строчных букв')
-# if not digit:
-#     error_msg_list.append('нет цифр')
-# if not special_char:
-#     error_msg_list.append('нет спецсимволов')
-# if error_msg_list:  # Если в всписке не пусто(ошибки добавились), то выводим ошибки в строку через запятую без последней запятой
-#     print(f'У нас следующие проблемы: {', '.join(error_msg_list)}')
-# else:
-#     print("Password is safety")   
+# Осуществляем проверки с помощью условных конструкций
+if len(password) < 8:
+    error_msg_list.append('длина < 8') 
+if not upper_char:
+    error_msg_list.append('нет заглавных букв')
+if not lower_char:
+    error_msg_list.append('нет строчных букв')
+if not digit:
+    error_msg_list.append('нет цифр')
+if not special_char:
+    error_msg_list.append('нет спецсимволов')
+if error_msg_list:  # Если в всписке не пусто(ошибки добавились), то выводим ошибки в строку через запятую без последней запятой
+    print(f'У нас следующие проблемы: {', '.join(error_msg_list)}')
+else:
+    print("Password is safety")   
 
 
 # ____________________________________________
@@ -194,27 +194,27 @@
 # - Если score не в диапазоне 0-100 → "Ошибка".  
 
 # Ограничение: Нельзя использовать if-elif-else, только тернарные операторы.
-question_flag = True
-while True:
-    count_flag = True 
-    if question_flag:
-        try:
-            score = int(input('Enter your count: '))
-        except ValueError:
-            print('Только числа')
-            count_flag = False
-        if count_flag:
-            print('A' if 100 >= score >= 90 else 'B' if 89 >= score >= 80 else 'C' if 79 >= score >= 70 else "D" if 69 >= score >= 60 else 'F' if 59 >= score >= 0 else 'Ошибка')
-            question = input('продолжим(да/нет)?: ')
-            question_flag = False
+# question_flag = True
+# while True:
+#     count_flag = True 
+#     if question_flag:
+#         try:
+#             score = int(input('Enter your count: '))
+#         except ValueError:
+#             print('Только числа')
+#             count_flag = False
+#         if count_flag:
+#             print('A' if 100 >= score >= 90 else 'B' if 89 >= score >= 80 else 'C' if 79 >= score >= 70 else "D" if 69 >= score >= 60 else 'F' if 59 >= score >= 0 else 'Ошибка')
+#             question = input('продолжим(да/нет)?: ')
+#             question_flag = False
 
-    elif question.lower() == 'да':
-        question_flag = True    
-    elif question.lower() == 'нет':
-        print('До скорых встреч')
-        break         
-    else:
-        question_flag = False
-        print('некорректный ответ')
-        question = input('продолжим(да/нет)?: ')
+#     elif question.lower() == 'да':
+#         question_flag = True    
+#     elif question.lower() == 'нет':
+#         print('До скорых встреч')
+#         break         
+#     else:
+#         question_flag = False
+#         print('некорректный ответ')
+#         question = input('продолжим(да/нет)?: ')
 
