@@ -1,6 +1,6 @@
 
 
-numbers_str = ["10", "20", "44d", "30", "40"]
+numbers_str = ["10", "20", "44о", "30", "40"]
 
 # Из списка numbers_str выберите элемент с индексом 2.
 
@@ -13,12 +13,13 @@ numbers_str = ["10", "20", "44d", "30", "40"]
 # соответствующим сообщением
 
 try:
-    if numbers_str[2].isdigit() == False:  
+    if numbers_str[2].isdigit() is False:  
         raise ValueError("Ошибка: преобразование строки в число невозможно")
+    number = int(numbers_str[2])
 except ValueError as e:
     print(e)
 else:
-    number = int(numbers_str[2])
+    
     if number % 2 == 0:
         print(f'преобразование прошло успешно! Имеем четное число = {number}')
     else:
