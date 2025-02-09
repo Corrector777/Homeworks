@@ -115,33 +115,36 @@
 
 # 7. В блоке finally выведите сообщение «Расчёт завершён».
 
-# operand_list = ['+', '-', '*', '/']
+operand_list = ['+', '-', '*', '/']
 
-# try:
-#     operand = input(''' Input one of: +, -, *, / ''')
-#     if operand not in operand_list:
-#         raise ValueError('Incorrect operand')
-#     a, b = [int(input('введи по очереди 2 числа: ')) for i in range(2)]
-#     if operand == '/' and b == 0:
-#         raise ZeroDivisionError("Error: devider can't be zero")
+try:
+    operand = input(''' Input one of: +, -, *, / ''')
+    if operand not in operand_list:
+        raise ValueError('Incorrect operand')
+    # try:                      вложенный try для попытки перевести символ в число
+    #     x = int(operand)
+    # except ValueError:
+    #     raise ValueError('данный символ невозможно перевести в число')
+    a, b = [int(input('введи по очереди 2 числа: ')) for i in range(2)]
+    if operand == '/' and b == 0:
+        raise ZeroDivisionError("Error: devider can't be zero")
     
-# except ValueError as e:
-#     print(e)
-# except ZeroDivisionError as e:
-#     print(e)
-
-# else:
-#     if operand == '+':
-#         result = a + b
-#     elif operand == '-':
-#         result = a - b
-#     elif operand == '*':
-#         result = a * b
-#     elif operand == '/':
-#         result = a / b
-#     print('Result = ', result)
-# finally:
-#     print('Calculation finished')
+except ValueError as e:
+    print(e)
+except ZeroDivisionError as e:
+    print(e)
+else:
+    if operand == '+':
+        result = a + b
+    elif operand == '-':
+        result = a - b
+    elif operand == '*':
+        result = a * b
+    elif operand == '/':
+        result = a / b
+    print('Result = ', result)
+finally:
+    print('Calculation finished')
 
 
 # _____________________________________________________
