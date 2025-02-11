@@ -3,8 +3,8 @@
 import random
 
 
-count = 1
-random_number = random.randint(1, 100)
+count = 0
+random_number = random.randint(1, 2)
 while True:
     try:
         my_number = int(input("Введите число: "))       
@@ -15,6 +15,7 @@ while True:
             count += 1
             print('Ваше число меньше сгенерированного')
         else:
+            count += 1
             print(f'Верно! Ваше число = {my_number}. Вы угадали его с {count}й попытки')
             break
     except ValueError:
