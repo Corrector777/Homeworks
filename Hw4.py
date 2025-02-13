@@ -107,15 +107,16 @@ while game_flag:
         2) Бежать вперёд – 50% шанс спастись.\n\
         3) Остаться на месте – мост ломается, игрок проигрывает\n')
         anwser = input('Ваш выбор (1, 2 или 3): \n')
+        result_anwser = anwser_func(anwser)
         try:
-            if anwser_func(anwser) == '1':
+            if result_anwser == '1':
                 print("Ты справился! Впереди тебя ждет финальное испытание")
                 print('Игрок добирается до финальных ворот, но их нужно взломать.\n')
                 bridge_flag = False
                 final_flag = True
                 break
             
-            elif anwser_func(anwser) == '3':
+            elif result_anwser == '3':
                 raise Exception('\nОшибка: Пол обрушился, и вы упали в пропасть!\n')
             else:
                 print('Неверный ответ. Выбери один из 3х вариантов')
@@ -132,7 +133,7 @@ while game_flag:
                 attempts_count += 1
                 anwser = input('Введи код: ')
                 if anwser == '777':
-                    print('Ворота открылись! Вы выбрались из замка!\nПозравляю с победой!')
+                    print('Ворота открылись! Вы выбрались из замка!\nПоздравляю с победой!')
                     final_flag = False
                     game_flag = False
                     break
