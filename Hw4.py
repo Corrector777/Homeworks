@@ -47,8 +47,8 @@ while game_flag:
             selected_items = return_matches(cleared_anwser, items_list)  #то в переменную записываем список с элементами пересекающихся множеств
             print(f'Вы выбрали: -<{', '.join(selected_items)}>-\n')
         else:
-            print('Либо ты ничего не выбрал, либо нет такого предмета!\
-                   Сделай выбор\n')
+            print('Либо ты ничего не выбрал, либо нет такого предмета!\n\
+            Сделай выбор\n')
             print(f'Ты ввел: {anwser}')
     
     if door_flag:
@@ -66,9 +66,7 @@ while game_flag:
                 elif door_key not in selected_items:
                     print(f'Ошибка: Такого предмета нет\nНапоминаю, в вашем инвентаре: -<{', '.join(selected_items)}>-\n')
                 else:
-                    # door_flag = True
-                    raise ValueError('Ошибка: Этот предмет не подходит!\n')
-         
+                    raise ValueError('Ошибка: Этот предмет не подходит!\n')        
             except ValueError as e:                
                 print(e)
         except ValueError:
