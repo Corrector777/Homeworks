@@ -27,7 +27,7 @@ from collections import namedtuple
 
 # создает новый список артефактов и добавляет в него новый артефакт
 # def add_treasure(x, y, name):
-#     new_treasures_list = treasures 
+#     new_treasures_list = treasures.copy() 
 #     new_treasure = x, y, name    
 #     new_treasures_list.append(new_treasure)
 #     return new_treasures_list
@@ -60,7 +60,7 @@ from collections import namedtuple
 # def seach_max_power_portal(portals_list):
 #     max_power = 0
 #     max_power_portal = tuple()
-#     for portal in portals:
+#     for portal in portals_list:
 #         color, power, place = portal
 #         if power > max_power:
 #             max_power = power
@@ -104,7 +104,7 @@ from collections import namedtuple
 # def seach_most_powerfull_gladiator(gladiators_list):
 #     max_power = 0
 #     most_powerfull_name = ''
-#     for gladiator in gladiators:
+#     for gladiator in gladiators_list:
 #         name, power, agility = gladiator
 #         if power > max_power:
 #             max_power = power
@@ -160,7 +160,7 @@ from collections import namedtuple
 
 # Добавит новую планету, не изменяя исходный словарь (создавая новый).
 # def new_planet(characteristic_tuple, name):
-#     new_planets = planets
+#     new_planets = planets.copy()
 #     new_planets[characteristic_tuple] = name
 #     return new_planets
 
@@ -180,10 +180,10 @@ from collections import namedtuple
 # Цель: Практика использования namedtuple и работы с кортежами.
 
 Dragon = namedtuple("Dragon", ["name", "level", "hp"])
-dragon1 = Dragon('Залетный', 80, 20)
-dragon2 = Dragon('Огненный', 33, 87)
+dragon1 = Dragon('Залетный', 80, 1)
+dragon2 = Dragon('Огненный', 33, 8)
 dragon3 = Dragon('Дымный', 59, 44)
-dragon4 = Dragon('Гнусавый', 77, -1)
+dragon4 = Dragon('Гнусавый', 77, 9)
 dragon5 = Dragon('Лихой', 44, 99)
 dragons_list = [dragon1, dragon2, dragon3, dragon4]
 
@@ -200,14 +200,13 @@ dragons_list = [dragon1, dragon2, dragon3, dragon4]
 
 
 # Определит, кто из драконов побежден (если hp <= 0).
-# def dragon_defeated(dragons_lst):
-#     dragon_defeated_name = ''
-#     for dragon in dragons_list:
-#         if dragon.hp <= 0:
-#             dragon_defeated_name = dragon.name
-#         else:
-#             dragon_defeated_name += 'Пока побежденных нет'
-#     return dragon_defeated_name
+def dragon_defeated(dragons_lst):
+    dragon_defeated_name = []
+    for dragon in dragons_list:
+        if dragon.hp <= 0:
+            dragon_defeated_name.append(dragon.name)
+        
+    return dragon_defeated_name if dragon_defeated_name else "пока нет побежденных"
 
 
 # def add_new_dragon(new_dragon):
@@ -217,6 +216,6 @@ dragons_list = [dragon1, dragon2, dragon3, dragon4]
 
 
 # print(most_powerfull(dragons_lst=dragons_list)) # Самый сильный
-# print(dragon_defeated(dragons_lst=dragons_list)) # Побежденный
+print(dragon_defeated(dragons_lst=dragons_list)) # Побежденный
 # print(add_new_dragon(dragon5)) # Новый дракон
 
