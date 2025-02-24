@@ -105,9 +105,8 @@ def frozen_keys(keys_lst):
 
 # создаем новый frozenset для добавления ключа(ей)
 def new_key_add(frozen_set, key):
-    new_frozen_set = frozen_set | frozenset(key)
-    return new_frozen_set
-
+    return frozen_set | frozenset(key)
+    
 
 # создаем словарь из нового множества(ключом является frozenset)
 keys_dict = {new_key_add(frozen_keys(keys), ['fff', 'fff', 'ffdd', 'ключ1']): 'Этот сундук имеет слишком много замков, не так ли?'}
