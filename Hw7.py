@@ -49,45 +49,33 @@ while game_flag:
     2) берем предмет(какой)) \n\
     3) заканчиваем(да/y/yes)?\n\
     Твой выбор: ').split(' ')  # Разбиваем строку ввода на элементы списка (для строк из неск эл-ов)
-        
         selection_result = action_input.pop()  # Выдергиваем последний элемент списка,что будет искомым ключом(если введен запрос типа: "идем на север" или "давай возьмем нож")
-        
         if selection_result in rooms[current_room]['выходы']:  # по ТЗ проверяем ввод на соответствие в значениях(список)  влож.словаря с ключом ['выходы']
-            print(f'Идем в {rooms[current_room]['выходы'][selection_result]}')
-            
+            print(f'Идем в {rooms[current_room]['выходы'][selection_result]}')            
             current_room = rooms[current_room]['выходы'][selection_result]  # Переназначаем текущую комнату
-            rooms_visit_lst.append(current_room)  # добавляем комнату в список посещений комнат
-            
+            rooms_visit_lst.append(current_room)  # добавляем комнату в список посещений комнат            
             print(f'Вы находитесь в комнате: {current_room}\n\
     описание комнаты: {rooms[current_room]['описание']}\n\
     доступные предметы в комнате: {', '.join(rooms[current_room]['предметы'])}\n\
     доступные направления: {', '.join(rooms[current_room]['выходы'].keys())}')
         
         elif selection_result in rooms[current_room]['предметы']:   # проверка ввода на соответствие в значениях(списке) влож.словаря по ключу ['предметы']
-            inventory_list.append(selection_result)  # добавляем предмет в список предметов для подсчета
-            
+            inventory_list.append(selection_result)  # добавляем предмет в список предметов для подсчета            
             inventory_dict = {invent: inventory_list.count(invent)   # строки 72-73 заменил генератором словаря(также не вызывает KeyError) просто 
                               for invent in inventory_list}   # для вариации(стр 72-73 удалять не стал так как там метод update также для вариции на тему)
-
             # for invent in inventory_list:  # пробежимся по списку предметов, чтобы одновить словарь
-            #     inventory_dict.update({invent: inventory_list.count(invent)})  # обновляем словарь инвентаря(значения ключей), а именно кол-во инвентаря методом update(), что исключает Keyerror в случае отсутсвия ключа в словаре
-            
-            rooms[current_room]['предметы'].remove(selection_result)  # Удаляем из изначального словаря забранный предмет согласно ТЗ
-            
+            #     inventory_dict.update({invent: inventory_list.count(invent)})  # обновляем словарь инвентаря(значения ключей), а именно кол-во инвентаря методом update(), что исключает Keyerror в случае отсутсвия ключа в словаре            
+            rooms[current_room]['предметы'].remove(selection_result)  # Удаляем из изначального словаря забранный предмет согласно ТЗ            
             print(f'В комнате остались предметы: {', '.join(rooms[current_room]['предметы'])}' if
                   rooms[current_room]['предметы'] else 'Больше предметов в комнате нет')   # Выводим оставшиеся в комнате предметы
     
         elif selection_result in stop_words:   # вариант остановки программы
-            print('КОНЕЦ', '_______________', sep='\n' )
-            
+            print('КОНЕЦ', '_______________', sep='\n' )            
             rooms_visit_dict = {room: rooms_visit_lst.count(room)  # генератор словаря согласно ТЗ для формирования словаря посещений комнат
-                                for room in rooms_visit_lst}
-            
+                                for room in rooms_visit_lst}            
             for key, value in rooms_visit_dict.items():      # вывод данных о посещениях комнат с помощью items()-ключ/значение(кортеж).
-                print(f'в комнате: <<{key}>> вы были {value} раз(а)') 
-            
-            print()
-            
+                print(f'в комнате: <<{key}>> вы были {value} раз(а)')             
+            print()            
             if inventory_list:
                 for key, value in inventory_dict.items():   # вывод данных о собранных предметах с помощью items()-ключ/значение(кортеж).
                     print(f'предмет: <<{key}>> вы собрали: {value} раз(а)') 
