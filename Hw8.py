@@ -148,29 +148,29 @@
 # match-case для обработки полученных данных.
 
 sensor_data = {
-            "fuel": 10,
-            "distance_to_destination": 1300,
+            "fuel": 40,
+            "distance_to_destination": 1400,
             "engine_status": "норма",
             "nearest_object": ''  # 'космическая станция'
                 }
 
 
 match sensor_data:
-    case {**rest} if not rest['fuel']:  # Проверка датчика топлива
+    case {'fuel': fuel} if not fuel:  # Проверка датчика топлива
         print('Датчик топлива не отвечает')
-    case {**rest} if not rest['distance_to_destination']:  # Проверка датчика расстояния
+    case {"distance_to_destination": distance} if not distance:  # Проверка датчика расстояния
         print('Датчик расстояния до цели не отвечает. Местонахождение корабля неизвестно')
-    case {**rest} if not rest['engine_status']:  # Проверка датчика двигателя
+    case {'engine_status': status} if not status:  # Проверка датчика двигателя
         print('Датчик двигателя не отвечает')
-    case {"fuel": fuel, "distance_to_destination": destination, "engine_status": status} if fuel < 20 and status != 'норма':  #
+    case {"fuel": fuel, "engine_status": status} if fuel < 20 and status != 'норма':  #
         print("Проблемы с топливом и двигателем")
     case {"fuel": fuel} if fuel < 20:  # Низкий уровень топлива
         print("Критически низкий уровень топлива")
-    case {**rest} if rest["distance_to_destination"] < 400:  # приближение к цели
-        print(f'До пункта назначения осталось {rest["distance_to_destination"]} миль')
-    case {**rest} if rest["nearest_object"]:  # обнаружена космическая станция поблизости.
-        print(f'Рядом обнаружено: {rest["nearest_object"]}')
-    case {**rest} if rest["engine_status"] == 'перегрев':  # Перегрев двигателя
+    case {"distance_to_destination": distance} if distance < 500:  # приближение к цели
+        print(f'До пункта назначения осталось {distance} миль')
+    case {"nearest_object": n_object} if n_object:  # обнаружена космическая станция поблизости.
+        print(f'Рядом обнаружено: {n_object}')
+    case {'engine_status': status} if status == 'перегрев':  # Перегрев двигателя
         print("Danger! Engine is overheated")
     case _:
         print("Данные в норме")
