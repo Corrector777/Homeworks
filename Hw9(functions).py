@@ -30,7 +30,7 @@ print(navigate_space('Вперед', 'Назад', 'Назад', 'налево',
 
 
 # Часть 3. Битва с инопланетным кораблём
-def ship_attack(ship_attack=0, alien_defence=0, ship_health=100, alien_health=120) ->str:
+def ship_attack(ship_attack=0, alien_defence=0, ship_health=100, alien_health=120) -> str:
     '''Функция вычисляет урон в битве между своим и инопланет кораблями'''
     my_ship_damage = ship_attack - alien_defence // 2
     if my_ship_damage <= 0:
