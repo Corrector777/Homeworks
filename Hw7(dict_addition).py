@@ -9,6 +9,17 @@ phone_book = {'Иван':
               }
 
 stop_words_set = {'выйти', '7', 'y', 'с', 'c'}
+allowed_chars = "0123456789+-()"
+
+
+def phone_check(number: int) -> bool:
+    flag = True
+    for char in number:
+        if char not in allowed_chars:
+            flag = False
+    return flag
+        
+
 
 while True:
     print('Телефонная книга')
@@ -26,16 +37,19 @@ while True:
         case 'добавить' | 'добавить контакт' | '1':
             name = input('Введите имя контакта: ').capitalize()
             if name in phone_book: # Введем проверку на наличие ключа в словаре. Если уже такой есть, то сообщение
-                print('Такой пользователь уже сущетсвует! Обновите его данные или создайте иного пользователя\n')
+                print('Такой пользователь уже существует! Обновите его данные или создайте иного пользователя\n')
             else:  # Если ключа нет, то добавляем всловарь значение
-                number = input('Введите номер контакта: ').lower()
-                tags = input('Введите нужные тэги через запятую или пробел: ').lower().split()            
-                phone_book.update({name:   
-                                   {'телефон': number,
-                                    'тэги': tags                              
-                                    }
-                                   })
-                print(f'<Пользователь {name} успешно добавлен>\n')
+                number = input('Введите номер контакта: ')
+                if phone_check(number):
+                    tags = input('Введите нужные тэги через запятую или пробел: ').lower().split()            
+                    phone_book.update({name:   
+                                       {'телефон': number,
+                                        'тэги': tags                              
+                                        }
+                                       })
+                    print(f'<Пользователь {name} успешно добавлен>\n')
+                else:
+                    print('Номер введен некорректно')
                 
         case 'обновить' | 'обновить контакт' | '2':
             print('Вы можете обновить следующие контакты:')
@@ -46,13 +60,8 @@ while True:
                 update_input = input('Введите вариант: \n').lower()
                 match update_input:
                     case 'номер' | 'номер телефона' | 'телефон':
-                        new_number = input('Введите новый номер телефона: ')
-                        allowed_chars = "0123456789+-()"
-                        allowed_chars_flag = True
-                        for char in new_number:
-                            if char not in allowed_chars: 
-                                allowed_chars_flag = False                          
-                        if allowed_chars_flag:
+                        new_number = input('Введите новый номер телефона: ')                                               
+                        if phone_check(new_number):
                             phone_book[contact_select]['телефон'] = new_number
                             print(f'\nНомер телефону успешно изменен на: {phone_book[contact_select]['телефон']}')
                         else:
