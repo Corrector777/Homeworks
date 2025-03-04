@@ -13,6 +13,8 @@ allowed_chars = "0123456789+-()"
 
 
 def phone_check(number: int) -> bool:
+    '''Функция проверяет валидность номера. номер содержиттолько цифры, скобки, а также знаки '+' и '-'.
+     Принимает аргумент -номер телефона. Возвращает булево значение '''
     flag = True
     for char in number:
         if char not in allowed_chars:
