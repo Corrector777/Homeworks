@@ -10,7 +10,7 @@ print(greet_commander(greeting='Привет', name='Jack'))
 
 # Часть 2. Навигация через звездный лабиринт
 def navigate_space(*args: str, bonus=0, penalty=0) -> int:
-    '''Функция вычисляет и возвращает навигационный бал.'''
+    '''Функция вычисляет и возвращает навигационный бал. На входи принимает неопределенное кол-во позиционных аргументов и 2 именованных с дефолтным значением'''
     navigation_result = 0  # переменная для подсчета баллов согласно маневрам
     penalty_count = 0  # Подсчет кол-ва штрафных маневров
     for direction in args:  # Перебираем циклом все значения args 
@@ -30,8 +30,9 @@ print(navigate_space('Вперед', 'Назад', 'Назад', 'налево',
 
 
 # Часть 3. Битва с инопланетным кораблём
-def ship_attack(ship_attack=0, alien_defence=0, ship_health=100, alien_health=120) -> str:
-    '''Функция вычисляет урон в битве между своим и инопланет кораблями'''
+def battle_alien(ship_attack=0, alien_defence=0, ship_health=100, alien_health=120) -> tuple[int, int, str]:
+    '''Функция вычисляет урон в битве между своим и инопланет кораблями. На вход принимает
+    4 именованных необязательных аргумента(со значениями по умолчанию). Возвращает кортеж из 3х значений(число,число, строка)'''
     my_ship_damage = ship_attack - alien_defence // 2
     if my_ship_damage <= 0:
         my_ship_damage = 1
@@ -39,15 +40,16 @@ def ship_attack(ship_attack=0, alien_defence=0, ship_health=100, alien_health=12
     my_ship_hp = ship_health - alien_ship_damage
     alien_ship_hp = alien_health - my_ship_damage
     message = ''
-    if alien_ship_hp <=0:
+    if alien_ship_hp <= 0:
         message = "Инопланетяне повержены! Космический мир спасён!"
-    elif my_ship_hp <=0:
+    elif my_ship_hp <= 0:
         message = "Ваш корабль уничтожен... миссия провалена."
     else:
         message = "Битва продолжается..." 
-    return (f'оставшееся здоровье корабля: {my_ship_hp}\nоставшееся \
-здоровье инопланетного корабля: {alien_ship_hp}\n\
-{message}')
-    
+    return (my_ship_hp, alien_ship_hp, message)
 
-print(ship_attack(150, 60))
+    
+ship_hp, alien_hp, result = battle_alien(150, 60)
+print(f"Здоровье корабля: {ship_hp}")
+print(f"Здоровье инопланетного корабля: {alien_hp}")
+print(result)
