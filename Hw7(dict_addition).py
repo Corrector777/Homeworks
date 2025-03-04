@@ -63,7 +63,7 @@ while True:
                         tag_operation_input = input('Введите (добавить/удалить): ')
                         match tag_operation_input:
                             case 'добавить':
-                                new_tags = input('Введите новые тэги: ').lower().split()
+                                new_tags = input('Введите новые тэги: ').lower().split(',')
                                 phone_book[contact_select]['тэги'].extend(new_tags)
                                 print(f'\nНовый тэг для контакта <{contact_select}> успешно добавлен: {phone_book[contact_select]['тэги']}')
                             case 'удалить':
