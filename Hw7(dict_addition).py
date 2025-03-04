@@ -80,9 +80,9 @@ while True:
                 if tag_input in phone_book[name]['тэги']:
                     tag_seach_list.append(name)                
             if tag_seach_list:
-                tag_seach_dict = {name: tag_input for name in tag_seach_list}
+                tag_seach_dict = {name: phone_book[name]['телефон'] for name in tag_seach_list}
                 print(f'По тэгу <{tag_input}> найдены пользователи:')
-                [print(f'- {k}') for k in tag_seach_dict.keys()]
+                [print(f'- {k}: телефон: {v}') for k, v in tag_seach_dict.items()]
                 print()
             else:
                 print('Внимание! Данный тэг не найден!\n')
