@@ -47,8 +47,16 @@ while True:
                 match update_input:
                     case 'номер' | 'номер телефона' | 'телефон':
                         new_number = input('Введите новый номер телефона: ')
-                        phone_book[contact_select]['телефон'] = new_number
-                        print(f'\nНомер телефону успешно изменен на: {phone_book[contact_select]['телефон']}')
+                        allowed_chars = "0123456789+-()"
+                        allowed_chars_flag = True
+                        for char in new_number:
+                            if char not in allowed_chars: 
+                                allowed_chars_flag = False                          
+                        if allowed_chars_flag:
+                            phone_book[contact_select]['телефон'] = new_number
+                            print(f'\nНомер телефону успешно изменен на: {phone_book[contact_select]['телефон']}')
+                        else:
+                            print('Номер введен некорректно.') 
                     case 'тэг' | 'тэги':
                         print(f'У данного пользователя следующие тэги: {phone_book[contact_select]['тэги']}\n')
                         print('Хотите удалить тэг или добавить?\n')
@@ -102,9 +110,7 @@ while True:
         case 'показать' | 'все контакты' | '5':
             print('Давай взглянем кто у нас есть в базе:')
             for contact in phone_book:
-                print(f'Имя: {contact}\n\
-Номер телефона: {phone_book[contact]['телефон']}\n\
-Тэги: {phone_book[contact]['тэги']}')
+                print(f'{contact} телефон: {phone_book[contact]['телефон']}, тэги: {', '.join(phone_book[contact]['тэги'])}')
                 print('_____________________________')
                                    
         case action if action in stop_words_set:
