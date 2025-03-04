@@ -110,9 +110,13 @@ while True:
         case action if action in stop_words_set:
             names_count = len(phone_book)
             tags_count = (sum([len(phone_book[name]['тэги']) for name in phone_book])) # считаем кол-во тэгов в словаре с помощью генератора
+            if names_count > 0:
+                avg_count = tags_count / names_count
+            else:
+                avg_count = 0             
             print(f'Статистика телефонной книги:\n\
 Всего контактов: {names_count}\n\
-Среднее количество тэгов: {tags_count / names_count}\n\
+Среднее количество тэгов: {avg_count}\n\
 До свидания!')
             break
         case _:
