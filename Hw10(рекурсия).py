@@ -184,31 +184,20 @@
 # Задание 3: Найти энергию в гиперпространстве ⚡
 
 
-def find_energy(data: dict) -> int:
-    '''Функция суммирует энергию. Принимает словарь, возвращает сумму значений ключей "энергия" '''
-    energy_sum = 0
-    if isinstance(data, dict):
-        for key, value in data.items():
-            if key == 'энергия':
-                energy_sum += value
-            elif isinstance(value, dict):
-                energy_sum += find_energy(value)
-    return energy_sum
+# def find_energ
 
-energy_data = {
-"слой 1": {
-"энергия": 10,
-"слой 2": {
-"аномалия": {
-"энергия": 5,
-"слой 3": {
-"энергия": 2,
-"слой 4": {
-"энергия": 8
-}
-}
-}
-}
-}
-}
-print(find_energy(energy_data))
+# ________________________
+# Задание 4: Гиперпрыжок через финальный разлом
+
+
+def gather_report(data, prefix='_'):
+    '''Собирает все вложенные данные в плоский словарь, добавляя префиксы для глубины.
+    Принимает словарь.возвращает плоский словарь'''
+    new_dict = {}
+    for key, value in data.items():
+        if isinstance(value, str or int):
+            new_dict[key] = value
+        elif isinstance(value, dict):
+            new_dict[]
+
+    
