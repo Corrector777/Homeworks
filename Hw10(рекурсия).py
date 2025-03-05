@@ -190,14 +190,33 @@
 # Задание 4: Гиперпрыжок через финальный разлом
 
 
-def gather_report(data, prefix='_'):
+def gather_report(data, prefix=''):
     '''Собирает все вложенные данные в плоский словарь, добавляя префиксы для глубины.
     Принимает словарь.возвращает плоский словарь'''
-    new_dict = {}
+    new_dict = {}    
     for key, value in data.items():
+        new_prefix = prefix + key + "_"  
         if isinstance(value, str or int):
-            new_dict[key] = value
-        elif isinstance(value, dict):
-            new_dict[]
+            new_dict[new_prefix[:-1]] = value
+        elif isinstance(value, dict):            
+            new_dict.update(gather_report(value, new_prefix))
+    return new_dict
 
-    
+ship_systems = {
+"ядро": {
+"температура": "норма",
+"мощность": "100%",
+"слой 1": {
+"слой 2": {
+"щит": {
+"уровень": "75%",
+"статус": "активен"
+}
+}
+}
+},
+"двигатель": {
+"состояние": "исправен"
+}
+}
+print(gather_report(ship_systems))
