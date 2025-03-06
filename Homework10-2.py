@@ -3,16 +3,19 @@ def echo(message: str, count: int) -> print:
     ARGS:сообщение(строка), кол-во повторений(int)
     Вывод: выводит на печать сообщение заданное 
     кол-во раз в пронумерованном порядке'''
-    if count <= 0:
-        pass
-    elif count > 0:        
-        echo(message, count - 1)
-        print(f'Echo {count}: {message}')
+    if (isinstance(count, int) and isinstance(message, str)):
+        if count <= 0:
+            pass
+        elif count > 0:        
+            echo(message, count - 1)
+            print(f'Echo {count}: {message}')
+    else:
+        print("Ошибка! Проверь корректность ввода(типы аргументов)")
 
 
-# message = "Help me!"
-# count = 3
-# echo(message, count)
+message = "Help me!"
+count = 3
+echo(message, count)
 
 # Задание 2
 
@@ -30,7 +33,8 @@ def thread(length: int) -> print:
             print(f'Thread loop of size: {length}')
             thread(length - 1)
     else:
-        print("Ошибка ввода")
+        print("Ошибка! введенное значение не является числом")
+
 
 # length = 5
 # thread(length)
@@ -47,10 +51,14 @@ def minotaur_steps(tracks: int):
       #  сама себя до тех пор, пока tracks не будет равен 0.Затем в обратном порядке возвращает из стека значения
       #всех вызванных собой же функций и возвращает их значения по очереди.Последнее вернувшееся значение из стека вызовов(первая вызванная рекурсивная функция)
       #  и есть наше искомое кол-во шагов
-    if tracks <= 0:
-        pass
-    elif tracks > 0:
-        minotaur_steps(tracks - 1)
-        return f'Total steps: {tracks}'
-    
-print(minotaur_steps(15))
+    if isinstance(tracks, int):
+        if tracks <= 0:
+            pass
+        elif tracks > 0:
+            minotaur_steps(tracks - 1)
+            return f'Total steps: {tracks}'
+    return "Ошибка! введенное значение не является числом"
+
+
+# tracks = 4   
+# print(minotaur_steps(tracks))
