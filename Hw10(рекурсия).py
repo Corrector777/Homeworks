@@ -26,7 +26,7 @@
 # Задание 2: Сколько шагов до еды?
 
 
-def count_steps_to_food(room, step=0) -> (bool, int):
+# def count_steps_to_food(room, step=0) -> (bool, int):
 #     '''Функция определяет уровень вложенности списка, в котором находится элемент 'еда' '''
 #     if room == 'еда':
 #         return step  # Базовый случай 1: Нашли еду! 1 шаг до нее отсюда.
@@ -63,17 +63,17 @@ def rescue_robot(room:[str, list], level=0) -> bool:
             robot, found_level = rescue_robot(item, level + 1)
             if robot:
                 return True, found_level 
-        return False, level
+
     return False, level
                 
 bunker = [
 'мусор',
-['мусор', ['робот', ['мусор', ['робот']], 'мусор'], 'мусор'],
+['мусор', ['роот', ['мусор', ['роот']], 'мусор'], 'мусор'],
 ['мусор', ['мусор', ['мусор', ['мусор']]]]
 ]
 
 robot, level = rescue_robot(bunker)
-print(f'Робот найден: {robot}, на {level} уровне') # True
+print(f'Робот найден: {robot}, на {level} уровне' if robot == True else 'Робот не найден') # True
 
 # ______________________________
 # Задание 4: Сбор топлива для выхода
