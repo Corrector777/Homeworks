@@ -9,7 +9,7 @@
 #     elif isinstance(room, list):
 #         for signal in room:          
 #             if find_signal(signal):
-#                 return 'мы нашли его'                
+#                 return True                
 #     return False
     
 
@@ -26,64 +26,54 @@
 # Задание 2: Сколько шагов до еды?
 
 
-# count = 0  # глобальная переменная - счетчик для функции подсчета шагов. глобально,
-# чтобы значение ее не обнулялось с кадым новым вызовом
-
-
-# def count_steps_to_food(room:[str, list]) -> int:
-#     '''Функция посчета шагов. Принимает строку или список строк. Подсчитывает кол-во шагов до строки
-#     "еда".Возвращает кол-во шагов '''   
+def count_steps_to_food(room, step=0) -> (bool, int):
+#     '''Функция определяет уровень вложенности списка, в котором находится элемент 'еда' '''
 #     if room == 'еда':
-#         return True       
+#         return step  # Базовый случай 1: Нашли еду! 1 шаг до нее отсюда.
+#     elif room == 'пусто':
+#         return 0  # Базовый случай 2: Пусто, еды нет, шагов нет.
 #     elif isinstance(room, list):
-#         global count             
-#         for step in room:
-#             if step == 'пусто':
-#                 count += 1  
-#             if count_steps_to_food(step):
-#                 return count + 1
-    
-#     return 0
+#         for item in room:
+#             steps = count_steps_to_food(item, step + 1) # Рекурсивный вызов для каждого элемента списка. Увеличиваем уровень вложенности(шаг)
+#             if steps > 0:
+#                 return steps        
+#     return 0 # На всякий случай, если встретится что-то неожиданное, считаем, что еды нет
 
-
+# # Пример использования:
 # bunker = [
-# 'пусто',
-# ['пусто', ['пусто', ['пусто', 'пусто', 'пусто'], 'пусто'], 'еда'],
-# ['пусто', ['пусто', ['пусто', ['пусто']]]]
-# ]
+#     'пусто',
+#     ['пусто', ['пусто', ['еда','еда'], 'пусто'],
+#     ['пусто', ['пусто', ['пусто', ['пусто']]]]
+# ]]
+# print(count_steps_to_food(bunker)) 
 
-# print(count_steps_to_food(bunker))
 
 # _____________________________
 # Задание 3: Спасение робота
 
-# steps_count = 0  # Опять глобальная переменная - счетчик для подсчет шагов. Глобальная, чтобы не обнулялся результат при вызове функции
-
-
-# def rescue_robot(room:[str, list]) -> bool:
-#     '''Функция поиска робота. Принимает строк или список строк. Возвращает True, если робот
-#     найден в списке/строке, иначе возвращает False. Дополнительно: функция выведет кол-во шагов,
-#       за которое робот был найден'''
+def rescue_robot(room:[str, list], level=0) -> bool:
+    '''Функция поиска робота. Принимает строк или список строк. Возвращает True, если робот
+    найден в списке/строке, иначе возвращает False. Дополнительно: функция выведет УРОВЕНЬ,
+      на котором робот был найден'''
     
-#     if room == 'робот':
-#         return True
-#     elif isinstance(room, list):
-#         for item in room:
-#             global steps_count
-#             if isinstance(item, str):
-#                 steps_count += 1
-#             if rescue_robot(item):
-#                 return (True, steps_count) 
-#     return False 
+    if room == 'робот':
+        return True, level 
+    elif isinstance(room, list):
+        for item in room:
+            robot, found_level = rescue_robot(item, level + 1)
+            if robot:
+                return True, found_level 
+        return False, level
+    return False, level
                 
-# bunker = [
-# 'мусор',
-# ['мусор', ['мусор', ['мусор', ['робот']], 'мусор'], 'мусор'],
-# ['мусор', ['мусор', ['мусор', ['мусор']]]]
-# ]
+bunker = [
+'мусор',
+['мусор', ['робот', ['мусор', ['робот']], 'мусор'], 'мусор'],
+['мусор', ['мусор', ['мусор', ['мусор']]]]
+]
 
-# robot, steps = rescue_robot(bunker)
-# print(f'Робот найден: {robot}, за {steps} шагов') # True
+robot, level = rescue_robot(bunker)
+print(f'Робот найден: {robot}, на {level} уровне') # True
 
 # ______________________________
 # Задание 4: Сбор топлива для выхода
@@ -190,33 +180,33 @@
 # Задание 4: Гиперпрыжок через финальный разлом
 
 
-def gather_report(data: dict, prefix='') -> dict:
-    '''Собирает все вложенные данные в плоский словарь, добавляя префиксы для глубины.
-    Принимает словарь.возвращает плоский словарь'''
-    new_dict = {}    
-    for key, value in data.items():
-        new_prefix = prefix + key + "_"  
-        if isinstance(value, str or int):
-            new_dict[new_prefix[:-1]] = value
-        elif isinstance(value, dict):            
-            new_dict.update(gather_report(value, new_prefix))
-    return new_dict
+# def gather_report(data: dict, prefix='') -> dict:
+#     '''Собирает все вложенные данные в плоский словарь, добавляя префиксы для глубины.
+#     Принимает словарь.возвращает плоский словарь'''
+#     new_dict = {}    
+#     for key, value in data.items():
+#         new_prefix = prefix + key + "_"  
+#         if isinstance(value, str or int):
+#             new_dict[new_prefix[:-1]] = value
+#         elif isinstance(value, dict):            
+#             new_dict.update(gather_report(value, new_prefix))
+#     return new_dict
 
-ship_systems = {
-"ядро": {
-"температура": "норма",
-"мощность": "100%",
-"слой 1": {
-"слой 2": {
-"щит": {
-"уровень": "75%",
-"статус": "активен"
-}
-}
-}
-},
-"двигатель": {
-"состояние": "исправен"
-}
-}
-print(gather_report(ship_systems))
+# ship_systems = {
+# "ядро": {
+# "температура": "норма",
+# "мощность": "100%",
+# "слой 1": {
+# "слой 2": {
+# "щит": {
+# "уровень": "75%",
+# "статус": "активен"
+# }
+# }
+# }
+# },
+# "двигатель": {
+# "состояние": "исправен"
+# }
+# }
+# print(gather_report(ship_systems))
