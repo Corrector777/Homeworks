@@ -13,9 +13,9 @@ def echo(message: str, count: int) -> print:
         print("Ошибка! Проверь корректность ввода(типы аргументов)")
 
 
-message = "Help me!"
-count = 3
-echo(message, count)
+# message = "Help me!"
+# count = 3
+# echo(message, count)
 
 # Задание 2
 
@@ -60,5 +60,5 @@ def minotaur_steps(tracks: int):
     return "Ошибка! введенное значение не является числом"
 
 
-# tracks = 4   
-# print(minotaur_steps(tracks))
+tracks = 4   
+print(minotaur_steps(tracks))
