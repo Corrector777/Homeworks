@@ -92,44 +92,41 @@ import random
 final_password = 'итератор'
 
 
-def check_password(password):
-    
-    ''' - Генератор с аргументом в виде истинного пароль(password)
+def check_password(password, attemps):
+    attemps_left = attemps  # задаем остаток попыток
+    ''' ARGS: истинный пароль(password), кол-во попыток
         - Принимает варианты  паролей пользователя с помощью send().
         - Проверяет совпадает ли пароль пользователя с истинным паролем(password)
         - Отлавливает возможные ошибки,которые мы отправим в генератор с помощью throw()
-        
+        - Подсчитывает кол-во попыток
         Генератор возвращает True,если пароль пользователя верен, иначе False
-        !!!Логика подсчета попыток, а также вброса ошибки throw() вынесена НАРУЖУ, чтобы throw() вбрасывался автоматом каждые 3 неудачные попытки'''    
-    while True:
+        '''    
+    while True:      
         try:
-            current_password = yield
-            if current_password == password:
-                yield True
+            current_password = yield  # ожидаем ввод пароля от пользователя
+            if current_password == password:  # если пароль равен искомому(верный)
+                print('Ура! Пароль верный! Стоп игра')
+                yield True  # возвращаем true для внешней логики и останавливаем генератор
                 break
-            else: 
-                yield False
-        except ValueError:
-            print('3 неверных попытки! выключаюсь')
+            else:
+                attemps_left -= 1  # если пароль неверный, уменьшаем кол-во попыток
+                if attemps_left > 0:  # если попытки еще есть, то выводим сообщение
+                    print(f'Пока неверно. Осталось попыток: {attemps_left} ')  
+        except ValueError:  # отклавливаем throw() и завершаем работу генератора
+            print(f'Неверных попыток: {attemps}! выключаюсь')
 
 
-'''Для того, чтобы динамически вводить пароли, логику подсчета попыток вынес 
-из генератора НАРУЖУ в вызов. Дабы в цикле можно было вводить варианты пароля,
-а также каждые 3 попытки вбрасывать ошибку в генератор(для этого в основном)'''
+max_attempts = 3  # задаем кол-во попыток
+password_gen = check_password(final_password, max_attempts)  # создаем экземпляр генератора
+next(password_gen)  # первый вызов генератора(пробуждение)
 
-password_gen = check_password(final_password)
-attemps_left = 3
-next(password_gen)
-for _ in range(10):
-    new_password = input("Введи пароль: ")
-    if password_gen.send(new_password):
-        print('Ура! Пароль верный! Стоп игра')
+'''Цикл для того, чтобы динамически вводить пароли, а также автоматически 
+каждые n попыток вбрасывать ошибку в генератор'''
+for i in range(10):
+    if i == max_attempts:  # Если номер текущей итерации равен заданному пределу попыток,
+        password_gen.throw(ValueError)   # Выбрасываем ошибку в генератор и остановливаем данный цикл
         break
-    else:
-        attemps_left -= 1
-        if attemps_left > 0:
-            print(f'Пока неверно. Осталось попыток: {attemps_left} ')
-            continue
-        else:
-            password_gen.throw(ValueError)
+    else:  # иначе:
+        new_password = input("Введи пароль: ")   # вводим пароль и получаем ответ от генератора
+        if password_gen.send(new_password):   # Если вернулось True, прекращаем данный цикл     
             break
