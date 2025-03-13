@@ -1,81 +1,81 @@
 import random
 # Задание 1: Декоратор для логирования
 
-# def log_auth(func):  # Декоратор
-#     def wrapper(*args, **kwargs):  # обертка  функции authenticate
-#         print(f'Функция {func.__name__} вызвана с аргументами {args}')
-#         print(func(*args))   
-#     return wrapper
+def log_auth(func):  # Декоратор
+    def wrapper(*args, **kwargs):  # обертка  функции authenticate
+        print(f'Функция {func.__name__} вызвана с аргументами {args}')
+        print(func(*args))   
+    return wrapper
 
 
-# @log_auth   # применяем декоратор
-# def authenticate(user=None, password=None):
-#     '''функция идентификации пользователя.
-#     ARGS: имя пользователя, пароль
-#     Возвращает: True, если пароль = password123, иначе - False'''
-#     if password == 'password123':
-#         return True
-#     return False
+@log_auth   # применяем декоратор
+def authenticate(user=None, password=None):
+    '''функция идентификации пользователя.
+    ARGS: имя пользователя, пароль
+    Возвращает: True, если пароль = password123, иначе - False'''
+    if password == 'password123':
+        return True
+    return False
     
 
-# authenticate('Иван', 'password123')
-# authenticate('Иван', 'password1')
+authenticate('Иван', 'password123')
+authenticate('Иван', 'password1')
 
 
 # Задание 2: Декоратор для проверки прав доступа
-# access_list = ['admin', 'manager']  # список доступных ролей
+access_list = ['admin', 'manager']  # список доступных ролей
 
 
-# def check_permission(access_list):  параметризированный декоратор(принимает список ролей)
-#     def decorator(func):  декоратор
-#         def wrapper(username, role):  обертка функции сheck_permission
-#             if role in access_list:  проверка.если аргумент в разрешенном списке
-#                 result = func(username, role)  вызываем функцию и выводим успешное сообщение
-#                 print(result)
-#             else:
-#                 print('У вас нет прав для выполнения этой операции') Если аргумент не в списке, выводим сообщение о запрете и функцию не вызываем
-#         return wrapper
-#     return decorator 
+def check_permission(access_list):  #параметризированный декоратор(принимает список ролей)
+    def decorator(func):  декоратор
+        def wrapper(username, role):  #обертка функции сheck_permission
+            if role in access_list:  #проверка.если аргумент в разрешенном списке
+                result = func(username, role)  #вызываем функцию и выводим успешное сообщение
+                print(result)
+            else:
+                print('У вас нет прав для выполнения этой операции') #Если аргумент не в списке, выводим сообщение о запрете и функцию не вызываем
+        return wrapper
+    return decorator 
         
 
-# @check_permission(access_list)  # применяем параметризированный декоратор
-# def delete_user(username, role):
-#     return f'Пользователь {username} успешно удален'
+@check_permission(access_list)  # применяем параметризированный декоратор
+def delete_user(username, role):
+    return f'Пользователь {username} успешно удален'
 
 
-# delete_user('user1', 'manager')
-# delete_user('user1', 'bob')
-# delete_user('user2', 'admin')
+delete_user('user1', 'manager')
+delete_user('user1', 'bob')
+delete_user('user2', 'admin')
 
 
 # Задание 3: Декоратор для кэширования результатов
 
 
-# def cache_result(func):  # Декоратор
-#     cash_dict = {}  # словарь -кэш в декораторе до вызова обертки
+def cache_result(func):  # Декоратор
+    cash_dict = {}  # словарь -кэш в декораторе до вызова обертки
    
-#     def wrapper(numbers):  # обертка, которая осуществит вызов функции calculate_average
-#         if tuple(numbers) in cash_dict:  # проверяем наличие ключа в словаре
-#             print(f'{cash_dict[tuple(numbers)]} (из кэша)') # если ключ найден в слове,берем значение из словаря
-#         else:
-#             cash_dict[tuple(numbers)] = func(numbers)  # если ключ не найден, создаем ключ-значение и обновляем словарь
-#             result = func(numbers)  # вызываем функцию и присваиваем результат ее вызова переменной result
-#             print(result)  # выводим значение из вызванной функции
-#     return wrapper  # декоратор возвращает саму функцию wrapper, которая по сути заменяет функцию calculate_average при вызове последней
+    def wrapper(numbers):  # обертка, которая осуществит вызов функции calculate_average
+        if tuple(numbers) in cash_dict:  # проверяем наличие ключа в словаре
+            print(f'{cash_dict[tuple(numbers)]} (из кэша)') # если ключ найден в слове,берем значение из словаря
+        else:
+            cash_dict[tuple(numbers)] = func(numbers)  # если ключ не найден, создаем ключ-значение и обновляем словарь
+            result = func(numbers)  # вызываем функцию и присваиваем результат ее вызова переменной result
+            print(result)  # выводим значение из вызванной функции
+    return wrapper  # декоратор возвращает саму функцию wrapper, которая по сути заменяет функцию calculate_average при вызове последней
 
 
-# @cache_result   # применяем декоратор
-# def calculate_average(numbers_list):
-    # '''Функция подсчета среднего арифметического всех чисел в списке
-    # Аргументы: список чисел
-    # возвращает среднее арифметическое'''
-#     count = 0
-#     sum_of_numbers = 0
-#     for i in numbers_list:
-#         count += 1
-#         sum_of_numbers += i
-#     averange = sum_of_numbers / count 
-#     return averange
+@cache_result   # применяем декоратор
+def calculate_average(numbers_list):
+    '''Функция подсчета среднего арифметического всех чисел в списке
+    Аргументы: список чисел
+    возвращает среднее арифметическое'''
+    count = 0
+    sum_of_numbers = 0
+    for i in numbers_list:
+        count += 1
+        sum_of_numbers += i
+    averange = sum_of_numbers / count 
+    return averange
 
 
 # calculate_average([1, 2, 3])
@@ -115,6 +115,6 @@ def send_notification(message):
 
 
 
-send_notification('Привет, пользователь')
+# send_notification('Привет, пользователь')
 
 
