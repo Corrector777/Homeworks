@@ -27,7 +27,7 @@ access_list = ['admin', 'manager']  # список доступных ролей
 
 
 def check_permission(access_list):  #параметризированный декоратор(принимает список ролей)
-    def decorator(func):  декоратор
+    def decorator(func):  # декоратор
         def wrapper(username, role):  #обертка функции сheck_permission
             if role in access_list:  #проверка.если аргумент в разрешенном списке
                 result = func(username, role)  #вызываем функцию и выводим успешное сообщение
