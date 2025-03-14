@@ -30,3 +30,51 @@
 #         file.close()
 #     if error_file:
 #         error_file.close()
+
+# Задание 3. Составление отчёта из данных нескольких источников
+# file1 = None
+# file2 = None
+# report_list = []
+
+# try:
+#     file1 = open('data1.txt', 'r')
+#     file2 = open('data2.txt', 'r')
+#     for line1 in file1:
+#         if line1 not in report_list:
+#             report_list.append(line1)
+#     for line2 in file2:
+#         if line2 not in report_list:            
+#             report_list.append(line2)
+#     if report_list:
+#         report_file = open('report.txt', 'w')
+#         report_file.writelines(report_list)
+# except FileNotFoundError as e:
+#     print(e)
+# finally:
+#     if file1:
+#         file1.close()
+#     if file2:
+#         file2.close()
+
+# Задание 4. Преобразование списка подозреваемых из CSV в простой формат
+
+file = None
+suspects_list = []
+
+try:
+    file = open('suspects.csv', 'r')
+    for line in file:
+        new_line = line.replace(',', ' - ')
+        suspects_list.append(new_line)
+    if suspects_list:
+        new_file = open('suspects_out.txt', 'w')
+        new_file.writelines(suspects_list)
+except FileNotFoundError as e:
+    print(e)
+finally:
+    if file:
+        file.close()
+    if new_file:
+        new_file.close()
+
+
