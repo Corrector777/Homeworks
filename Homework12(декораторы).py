@@ -1,8 +1,10 @@
 import random
+import functools
 # Задание 1: Декоратор для логирования
 
 # def log_auth(func):  # Декоратор
-#     def wrapper(*args, **kwargs):  # обертка  функции authenticate
+    # @functools.wrap(func)
+    # def wrapper(*args, **kwargs):  # обертка  функции authenticate
 #         print(f'Функция {func.__name__} вызвана с аргументами {args}, {kwargs}')
 #         return func(*args, **kwargs)  
 #     return wrapper
@@ -26,6 +28,7 @@ import random
 
 # def check_permission(roles):  #параметризированный декоратор(принимает список ролей)
 #     def decorator(func):  # декоратор
+#         @functools.wrap(func)
 #         def wrapper(username, role):  #обертка функции сheck_permission
 #             if role in roles:  #проверка.если аргумент в разрешенном списке
 #                 func(username, role)  #вызываем функцию и выводим успешное сообщение
@@ -50,7 +53,8 @@ import random
 
 def cache_result(func):  # Декоратор
     cash_dict = {}  # словарь -кэш в декораторе до вызова обертки
-   
+
+    @functools.wrap(func)
     def wrapper(numbers):  # обертка, которая осуществит вызов функции calculate_average
         if tuple(numbers) in cash_dict:  # проверяем наличие ключа в словаре
             print(f'{cash_dict[tuple(numbers)]} (из кэша)')  # если ключ найден в слове,берем значение из словаря
@@ -86,6 +90,7 @@ def calculate_average(numbers_list):
 # Задание 4: Декоратор для повторного выполнения при ошибке
 def retry_on_failure(retries):  # декоратор параметризованный.Аргумент- кол-во попыток
     def decorator(func):  # декоратор функции
+        @functools.wrap(func)
         def wrapper(message):  # обертка
             for attempt in range(retries):  # задаем цикл с количеством итераций = кол-ву попыток
                 try:   # в блоке try-except  отлавливаем вброшенную ошибку
