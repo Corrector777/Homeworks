@@ -73,8 +73,8 @@ suspects_list = []
 try:
     file = open('suspects.csv', 'r')
     for line in file:
-        splitted_line = line.strip().split(',')
-        new_line = ''.join(splitted_line[i] + ' - ' for i in range(len(splitted_line)))
+        splitted_parts = line.strip().split(',')
+        new_line = ''.join(splitted_parts[i] + ' - ' for i in range(len(splitted_parts)))
         result_line = new_line[: -3] + '\n'
         suspects_list.append(result_line)
     if suspects_list:
