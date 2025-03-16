@@ -20,6 +20,8 @@ while True:
             break
     except ValueError:
         print('Ай-яй!! Принимаю только численные значения')
+    except IndexError as e:
+        print(f"Ошибка в формате данных CSV файла - {e}")
 
 # Задание 2
 # ______________________
