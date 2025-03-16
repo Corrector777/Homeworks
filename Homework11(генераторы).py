@@ -116,13 +116,13 @@ def check_password(password, attemps):
             print(f'Неверных попыток: {attemps}! выключаюсь')
 
 
-max_attempts = 2  # задаем кол-во попыток
+max_attempts = 3  # задаем кол-во попыток
 password_gen = check_password(final_password, max_attempts)  # создаем экземпляр генератора
 next(password_gen)  # первый вызов генератора(пробуждение)
 
 '''Цикл для того, чтобы динамически вводить пароли, а также автоматически 
 каждые n попыток вбрасывать ошибку в генератор'''
-for i in range(10):
+for i in range(max_attempts + 1):
     if i == max_attempts:  # Если номер текущей итерации равен заданному пределу попыток,
         password_gen.throw(ValueError)   # Выбрасываем ошибку в генератор и остановливаем данный цикл
         break
