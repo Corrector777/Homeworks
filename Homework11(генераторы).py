@@ -1,48 +1,46 @@
 import random
 
-# # Задание 1: Загадочный сундук
+# Задание 1: Загадочный сундук
 
 # items = ['меч', 'щит', 'зелье', 'ключ']
 # riddles = ['Острое и блестящее', 'Защитит от удара', 'Восстанавливает силы',
 # 'Открывает любые двери']
 
 
-# pairs_list = []
-# for i in range(len(items)):
-#     pairs_list.append((items[i], riddles[i]))
+# pairs_list = list(zip(items, riddles))
 # random.shuffle(pairs_list)
 # iterator = iter(pairs_list)
 
-# try:
-#     print(next(iterator))
-#     print(next(iterator))
-#     print(next(iterator))
-#     print(next(iterator))
-#     print(next(iterator))
-# except StopIteration:
-#     print("Сундук пуст, поиск окончен!")
+# while True:
+#     try:
+#         print(next(iterator))
+#     except StopIteration:
+#         print("Сундук пуст, поиск окончен!")
+#         break
 
 
 # Задание 2: Генератор магических заклинаний
-# magic_symbols = ['@', '#', '%', '&', '*']
-# times = 5
-# start_word = 'магия'
+magic_symbols = ['@', '#', '%', '&', '*']
+times = 5
+start_word = 'магия'
+unique_spells = set()
 
-
-# def magic_spell(start_word):
-#     '''Генератор слов. Принимает стартовое слово в виде строки.
-#        перемешивает буквы слова, добавляет спецсимвол и возвращает полученное значение 
-#      в виде новой строки'''
-#     current_word = start_word  # задаем значение текущего слова для дальнейшего изменения  
-#     while True:    # Использую бесконечный цикл для генератора, так как кол-во вызовов генератора 
-#                     #определяется циклом вызова генератора. При этом возможность случайной генерации при 
-#                     # увеличении числа вызовов генератора не останавливалась
-#         word_symb = [symb for symb in current_word]  # создаем список символов из стартовой строки
-#         random.shuffle(word_symb)  # Перемешиваем символы
-#         shuffled_word = ''.join(word_symb) # сохраняем новую строку из перемешанных символов
-#         new_spell = shuffled_word + random.choice(magic_symbols)  # добавляем спецсимвол
-#         current_word = shuffled_word # обновляем значение текущего слова для последующих итераций
-#         yield new_spell
+def magic_spell(start_word):
+    '''Генератор слов. Принимает стартовое слово в виде строки.
+       перемешивает буквы слова, добавляет спецсимвол и возвращает полученное значение 
+     в виде новой строки'''
+    current_word = start_word  # задаем значение текущего слова для дальнейшего изменения  
+    while True:    # Использую бесконечный цикл для генератора, так как кол-во вызовов генератора 
+                    #определяется циклом вызова генератора. При этом возможность случайной генерации при 
+                    # увеличении числа вызовов генератора не останавливалась
+        # word_symb = [symb for symb in current_word]  # создаем список символов из стартовой строки
+        # random.shuffle(word_symb)  # Перемешиваем символы
+        shuffled_word = ''.join(random.sample(current_word, len(current_word))) # перемешиваем и сохраняем новую строку из перемешанных символов
+        new_spell = shuffled_word + random.choice(magic_symbols)
+        if new_spell not in unique_spells:
+            unique_spells.add(new_spell)   # добавляем спецсимвол
+            current_word = shuffled_word  # обновляем значение текущего слова для последующих итераций
+            yield new_spell
         
 
 # my_gen = magic_spell(start_word)
@@ -56,12 +54,14 @@ import random
 # def winner_dwarf(dwarf_list, current_round=1):
 #     '''Генератор определения победителя. Принимает список игороков.
 #        возвращает имя победителя и кол-во собранных алмазов'''
+#     result_dict = {dwarf: 0 for dwarf in dwarf_list}  # создадим стартовый словарь ключ-имя, значение = 0
 #     while True:
-#           result_dict = {dwarf: random.choice(range(10)) for dwarf in dwarf_list}  # создадим словарь ключ-имя, значение- случ цифра от 0 до 9  
-#           winner = max(result_dict, key=result_dict.get) # поиск ключа с максимальным значением
-#           # print(result_dict)  # проверочный принт
-#           yield f'Раунд {current_round}: Лидер - {winner} ({result_dict[winner]} алмазов) '
-#           current_round += 1
+#         for dwarf in dwarfs:
+#             result_dict[dwarf] += random.randint(0, 9)  # для каждого гнома накапливааем случайное кол-во очков за каждый раунд
+#         winner = max(result_dict, key=result_dict.get) # поиск ключа с максимальным значением
+#         # print(result_dict)  # проверочный принт
+#         yield f'Раунд {current_round}: Лидер - {winner} ({result_dict[winner]} алмазов) '
+#         current_round += 1
 
 
 # winner = winner_dwarf(dwarfs)
@@ -70,15 +70,15 @@ import random
 
 
 # # Задание 4: Лабиринт с секретными порталами
-# # portal_positions = {3: 7, 6: 2, 10: 15} # ключ — шаг, значение — куда
-# # steps_total = 12
+# portal_positions = {3: 7, 6: 2, 10: 15} # ключ — шаг, значение — куда
+# steps_total = 12
 
 
 # def portal_search(portal_positions):
 #     count = 0
 #     while True:
 #         count += 1
-#         if count in portal_positions.keys():
+#         if count in portal_positions:
 #             yield f'Шаг {count} портал! Перенос на шаг {portal_positions[count]}'
 #         else:
 #             yield f'Шаг {count} безопасен'
@@ -116,7 +116,7 @@ def check_password(password, attemps):
             print(f'Неверных попыток: {attemps}! выключаюсь')
 
 
-max_attempts = 3  # задаем кол-во попыток
+max_attempts = 2  # задаем кол-во попыток
 password_gen = check_password(final_password, max_attempts)  # создаем экземпляр генератора
 next(password_gen)  # первый вызов генератора(пробуждение)
 
