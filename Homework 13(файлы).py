@@ -71,11 +71,11 @@ new_file = None
 suspects_list = []
 
 try:
-    file = open('suspects.csv', 'r')
+    file = open('Ferapontov/suspects.csv', 'r')
     for line in file:
         splitted_parts = line.strip().split(',')
         new_line = ''.join(splitted_parts[i] + ' - ' for i in range(len(splitted_parts)))
-        result_line = new_line[: -3] + '\n'
+        result_line = ' - '.join(splitted_parts) + '\n'
         suspects_list.append(result_line)
     if suspects_list:
         new_file = open('suspects_out.txt', 'w')
