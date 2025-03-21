@@ -31,12 +31,9 @@ def secret_file(filename, mode):
         case 'r':
             # Реализация с изменением строк в файле
             print(f'Открываем файл {filename} в режиме чтения')
-            with open(filename, 'r+') as f:          
-                file = f.read().rstrip().split('\n')
-                f.seek(0)
-                for line in file:
-                    f.write(f"[СЕКРЕТНО] {line}\n")
-                f.seek(0)
+            with open(filename, 'r') as f:          
+                for line in f:
+                    print(f'[СЕКРЕТНО] {line.strip()}')
                 yield f 
                         
         case 'w':
@@ -47,7 +44,7 @@ def secret_file(filename, mode):
                 file = f.read().rstrip().split('\n')
                 f.seek(0)
                 for line in file:
-                     f.write(f"[СЕКРЕТНО] {line}\n")
+                    f.write(f"[СЕКРЕТНО] {line}\n")
         case _:
             raise ValueError('Недопустимый режим работы')
     print(f'Закрываем файл {filename}')
@@ -59,8 +56,7 @@ create_test_file(test_filename, "имя пользователя: admin\nпар�
 print("\nЧтение секретного файла:")
 try:
     with secret_file(test_filename, 'r') as file_content:
-        for line in file_content:
-            print(f'{line.strip()}')
+        pass
 
 except Exception as e:
     print(f"Ошибка при чтении файла: {e}")
