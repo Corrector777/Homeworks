@@ -29,10 +29,16 @@ def secret_file(filename, mode):
 # Напишите ваш код здесь
     match mode:
         case 'r':
+            # Реализация с изменением строк в файле
             print(f'Открываем файл {filename} в режиме чтения')
-            with open(filename, 'r') as f:
-                yield f         
-              #Закрываю файл secure_data.txt           
+            with open(filename, 'r+') as f:          
+                file = f.read().rstrip().split('\n')
+                f.seek(0)
+                for line in file:
+                    f.write(f"[СЕКРЕТНО] {line}\n")
+                f.seek(0)
+                yield f 
+                        
         case 'w':
             print(f'Открываем файл {filename} в режиме записи')
             with open(filename, 'w+') as f:
@@ -46,6 +52,7 @@ def secret_file(filename, mode):
             raise ValueError('Недопустимый режим работы')
     print(f'Закрываем файл {filename}')
 
+
 test_filename = "secure_data.txt"
 create_test_file(test_filename, "имя пользователя: admin\nпароль: supersecret")
 
@@ -53,7 +60,7 @@ print("\nЧтение секретного файла:")
 try:
     with secret_file(test_filename, 'r') as file_content:
         for line in file_content:
-            print(f'[CЕКРЕТНО] {line.strip()}')
+            print(f'{line.strip()}')
 
 except Exception as e:
     print(f"Ошибка при чтении файла: {e}")
@@ -73,5 +80,5 @@ with open(output_filename, 'r') as f:
     print(f.read()) 
 
 # Очистка тестовых файлов
-# delete_file_if_exists(test_filename)
-# delete_file_if_exists(output_filename)
+delete_file_if_exists(test_filename)
+delete_file_if_exists(output_filename)
