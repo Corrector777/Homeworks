@@ -35,11 +35,11 @@ def secret_file(filename, mode):
               #Закрываю файл secure_data.txt           
         case 'w':
             print(f'Открываем файл {filename} в режиме записи')
-            with open(filename, 'w') as f:
+            with open(filename, 'w+') as f:
                 yield f
-            with open(filename, 'r') as f:
+                f.seek(0)
                 file = f.read().rstrip().split('\n')
-            with open(filename, 'w') as f:
+                f.seek(0)
                 for line in file:
                      f.write(f"[СЕКРЕТНО] {line}\n")
         case _:
@@ -73,5 +73,5 @@ with open(output_filename, 'r') as f:
     print(f.read()) 
 
 # Очистка тестовых файлов
-delete_file_if_exists(test_filename)
-delete_file_if_exists(output_filename)
+# delete_file_if_exists(test_filename)
+# delete_file_if_exists(output_filename)
