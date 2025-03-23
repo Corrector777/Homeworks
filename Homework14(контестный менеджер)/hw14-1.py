@@ -43,11 +43,8 @@ class OperationTimer:
     def __exit__(self, exc_type, exc_value, traceback):
         self.end_time = time.time()
         self.elapsed_time = (self.end_time - self.start_time) * 1000
-    
-          
+           
 # Примеры использования
-
-
 print("Миссия 1: Измерение времени операций")
 print("-" * 50)
 
@@ -60,7 +57,6 @@ print(f"Запрос к базе данных занял {timer.elapsed_time:.2f
 with OperationTimer() as timer:
     connection = server_connection_simulation()
 print(f"Подключение к серверу заняло {timer.elapsed_time:.2f} мс. Статус: {connection['status']}")
-
 
 # Ожидаемый вывод (значения времени будут отличаться):
 # Миссия 1: Измерение времени операций
