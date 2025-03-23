@@ -52,10 +52,9 @@ def secure_connection(host, credentials):
     print(f"[ПОДКЛЮЧЕНИЕ] Устанавливаю соединение с {host}...")
 # На здесь
     try:
-        connection = simulate_connection_attempt(host, credentials)
+        simalate_connection = simulate_connection_attempt(host, credentials)
         print(f"[ПОДКЛЮЧЕНИЕ] Соединение с {host} установлено успешно")
-        yield connection
-       
+        yield simalate_connection   
     except ConnectionError as e:
         print(f"[ОШИБКА] {e}")
         raise ConnectionError(e)
