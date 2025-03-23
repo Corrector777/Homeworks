@@ -78,3 +78,19 @@ with open(output_filename, 'r') as f:
 # Очистка тестовых файлов
 delete_file_if_exists(test_filename)
 delete_file_if_exists(output_filename)
+
+# Чтение секретного файла:
+# Открываю файл secure_data.txt для чтения
+# [СЕКРЕТНО] имя пользователя: admin
+# [СЕКРЕТНО] пароль: supersecret
+# Закрываю файл secure_data.txt
+#
+# Запись в секретный файл:
+# Открываю файл hacker_report.txt для записи
+# Закрываю файл hacker_report.txt
+# Проверка записанного файла:
+# [СЕКРЕТНО] доступ получен
+# [СЕКРЕТНО] данные скопированы
+#
+# Файл secure_data.txt удален
+# Файл hacker_report.txt удален
