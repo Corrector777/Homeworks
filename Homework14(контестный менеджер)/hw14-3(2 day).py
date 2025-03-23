@@ -83,6 +83,7 @@ def multi_file_reader(filenames):
                 lines = f.read().strip().split('\n')
                 statistics[filename] = len(lines)
                 for line in lines:
+                    # Пропускаем комментарии
                     if line.startswith('#'):
                         continue
                     else:
@@ -92,9 +93,12 @@ def multi_file_reader(filenames):
     except Exception as e:
         print(f'Произошла ошибка: {e}')
     finally:
-        print('\nСтатистика чтения:')
-        for k, v in statistics.items():
-            print(f'- {k}: прочитано {v} строк')
+        if statistics:
+            print('\nСтатистика чтения:')
+            for k, v in statistics.items():
+                print(f'- {k}: прочитано {v} строк')
+        else:
+            print('Статистика чтения отсутствует')
         print(f'\nЗакрываю множественное чтение из {len(filenames)} файлов...\n')
         
 
@@ -124,9 +128,6 @@ try:
     # Используем контекстный менеджер для работы с несколькими файлами
     with multi_file_reader([f[0] for f in config_files]) as lines:
         for line in lines:
-            # Пропускаем комментарии
-            if line.startswith('#'):
-                continue
         # Проверяем, содержит ли строка искомые термины
             if any(term in line.lower() for term in search_terms):
                 found_configs.append(line)
