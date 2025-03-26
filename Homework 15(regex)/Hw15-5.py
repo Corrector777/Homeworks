@@ -58,15 +58,6 @@ def detect_sql_injection(query_string):
             "risk_level": "Критический"
         })
 
-    # Пример формата для добавления обнаруженной инъекции:
-    # if injection_found:
-    # result["safe"] = False
-    # result["details"].append({
-
-    # "type": "Тип инъекции",
-    # "found": "Найденная часть запроса",
-    # "risk_level": "Уровень риска"
-# })
     return result
 
 
