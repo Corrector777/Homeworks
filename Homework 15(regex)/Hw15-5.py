@@ -5,15 +5,15 @@ def detect_sql_injection(query_string):
     result = {"safe": True, "details": []}
     # Скомпилированные регулярные выражения для оптимизации
     # TODO: Регулярное выражение для обнаружения базовых SQL-инъекций
-    basic_injection_pattern = re.compile(r'SELECT\w+user.+|INSERT|UPDATE\w+user.+|DELETE|DROP')
+    basic_injection_pattern = re.compile(r'SELECT.*\=\'\w+\'|INSERT|UPDATE\w+user.+|DELETE|DROP.*user.+')
     # TODO: Регулярное выражение для обнаружения комментариев SQL
     comment_injection_pattern = re.compile(r'--|/\*.*?\*/')
     # TODO: Регулярное выражение для обнаружения UNION-атак
-    union_injection_pattern = re.compile(r'UNION')
+    union_injection_pattern = re.compile(r'UNION.+FROM.*')
     # TODO: Регулярное выражение для обнаружения условий OR/AND в необычном контексте
-    logical_injection_pattern = re.compile(r'OR|AND')
+    logical_injection_pattern = re.compile(r'OR.*|AND.*')
     # TODO: Регулярное выражение для обнаружения модификации данных
-    data_modification_pattern = re.compile(r'UPDATE\s\w+\sSET')
+    data_modification_pattern = re.compile(r'UPDATE.*\=\'\w+\'')
     # Проверка на различные типы инъекций
     # TODO: Реализуйте проверки и заполните result
     basic = basic_injection_pattern.search(query_string)
