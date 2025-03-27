@@ -161,9 +161,9 @@ if __name__ == "__main__":
     print(f"Alerts: {raptor_monitor.get_alerts()}\n")
 
     # # Обновляем с критическими значениями
-    # raptor_monitor.update_metrics(42.0, 120, 70, 0.6, 0.7)
-    # print(raptor_monitor)
-    # print(f"Alerts: {raptor_monitor.get_alerts()}\n")
+    raptor_monitor.update_metrics(42.0, 120, 70, 0.6, 0.7)
+    print(raptor_monitor)
+    print(f"Alerts: {raptor_monitor.get_alerts()}\n")
 
 
 # Анализируем тенденции
