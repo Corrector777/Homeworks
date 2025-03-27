@@ -52,19 +52,15 @@ def secure_connection(host, credentials):
     print(f"[ПОДКЛЮЧЕНИЕ] Устанавливаю соединение с {host}...")
 # На здесь
     try:
-        simalate_connection = simulate_connection_attempt(host, credentials)
+        simulate_connection = simulate_connection_attempt(host, credentials)
         print(f"[ПОДКЛЮЧЕНИЕ] Соединение с {host} установлено успешно")
-        yield simalate_connection   
+        yield simulate_connection   
     except ConnectionError as e:
         print(f"[ОШИБКА] {e}")
         raise ConnectionError(e)
     except AuthenticationError as e:
         print(f"[ОШИБКА] {e}")
         raise AuthenticationError(e)
-    except PermissionError as e:
-        print(f"[ОШИБКА] {e}")
-        raise PermissionError(e)    
-  
     finally:
         print(f"[ПОДКЛЮЧЕНИЕ] Закрываю соединение с {host}...")    
 
