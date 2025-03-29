@@ -33,10 +33,14 @@ def capture_output():
     standard_out = sys.stdout
     buffer = StringIO()
     sys.stdout = buffer
+    captured_container = []
     try:    
-        yield buffer  # как вариант можно через lambda: buffer.getvalue() 
+        yield captured_container  # как вариант можно через lambda: buffer.getvalue() 
     finally:
+        captured_container.append(buffer.getvalue())
+        captured_container.append('Выключен режим скрытности')   
         sys.stdout = standard_out
+
         
     
  # Примеры использования
@@ -48,12 +52,14 @@ print(f"Найдено открытых портов: {len(ports)}\n")
 
 
 print("С перехватом вывода (тихий режим):")
+output_container = []
 with capture_output() as output:
     admins_data = verbose_data_function()
-buffer = output.getvalue()
+    output_container = output
+output_buffer = output_container[0]
 print(f"Операция завершена тихо, найдено администраторов: {admins_data['admins']}")
-print('Выключен режим скрытности')  # на самом деле режим выключен сразу после блока with(при возврате исходного stdout)
-print(f"Перехваченный вывод (сохранен для анализа):\n{buffer}")
+print(f'{output_container[1]}')  # проброс сообщения из контекстного менеджера с контентейнером
+print(f"Перехваченный вывод (сохранен для анализа):\n{output_buffer}")
 
 
 # Ожидаемый вывод:
