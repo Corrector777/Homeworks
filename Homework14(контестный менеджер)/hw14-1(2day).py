@@ -54,9 +54,8 @@ def file_pair(input_file, output_file):
     try:
         with open(input_file, 'r') as in_file, open(output_file, 'w') as out_file:
             yield in_file, out_file   
-    except FileNotFoundError as e:
-        print(e)
-    print(f"Закрываю пару файлов: {input_file} и {output_file}") 
+    finally:
+        print(f"Закрываю пару файлов: {input_file} и {output_file}") 
 
 # Пример использования
 
