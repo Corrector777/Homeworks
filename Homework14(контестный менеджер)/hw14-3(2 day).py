@@ -76,30 +76,46 @@ def cleanup_config_files(*filenames):
 def multi_file_reader(filenames):
     print(f'\nОткрываю множественное чтение из {len(filenames)} файлов...')
     try:
-        all_files_lines = []
+        all_files = []
         statistics = {}
         for filename in filenames:
-            with open(filename, 'r') as f:
-                lines = f.read().strip().split('\n')
-                statistics[filename] = len(lines)
-                for line in lines:
+            try:
+                f_obj = open(filename, 'r')
+                all_files.append(f_obj)
+            except FileNotFoundError:
+                print(f'Файл {filename} не найден, пропускаю')
+                continue
+            except Exception as e:
+                print(f'Произошла ошибка при открытии файла {filename}: {e}')
+        print("______", all_files)
+
+        def line_generator():
+            nonlocal statistics
+            for i, f_obj in enumerate(all_files):
+                filename = filenames[i]
+                file_line_number = 0
+                for line in f_obj:
+                    file_line_number += 1
+                    statistics[filename] = statistics.get(filename, 0)
+                    statistics[filename] += 1
                     # Пропускаем комментарии
                     if line.startswith('#'):
                         continue
                     else:
-                        line = f'[{filename}] {line}'
-                        all_files_lines.append(line)                
-        yield all_files_lines
-    except Exception as e:
-        print(f'Произошла ошибка: {e}')
+                        line = f'[{filename}:{file_line_number}] {line.strip()}'
+                        yield line
+               
+        yield line_generator()
     finally:
         if statistics:
             print('\nСтатистика чтения:')
-            for k, v in statistics.items():
-                print(f'- {k}: прочитано {v} строк')
+            for filename, count in statistics.items():
+                print(f'- {filename}: прочитано {count} строк')
         else:
             print('Статистика чтения отсутствует')
         print(f'\nЗакрываю множественное чтение из {len(filenames)} файлов...\n')
+        for f_obj in all_files:
+            f_obj.close()
         
 
 # Пример использования
@@ -128,7 +144,7 @@ try:
     # Используем контекстный менеджер для работы с несколькими файлами
     with multi_file_reader([f[0] for f in config_files]) as lines:
         for line in lines:
-        # Проверяем, содержит ли строка искомые термины
+             # Проверяем, содержит ли строка искомые термины
             if any(term in line.lower() for term in search_terms):
                 found_configs.append(line)
         # Выводим результаты
