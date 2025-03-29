@@ -54,10 +54,16 @@ def temp_encrypted_file(data, key):
             temp_file.write(xor_encrypt_decrypt(data, key))
             temp_file.flush()
             yield temp_file.name
+    finally:
+        if temp_file.name and os.path.exists(temp_file.name):
             print(f'Удаляем временный файл {temp_file.name}...')
-            os.remove(temp_file.name)
-    except Exception as e:
-        raise e  
+            try:
+                os.remove(temp_file.name)
+            except OSError as e:
+                print(f'Ошибка при удалении временного файла: {e}')
+        
+        else:
+            print('Временный файл не создан или имя не существует.')
   
         
 # Пример использования
