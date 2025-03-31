@@ -14,39 +14,43 @@ def extract_product_info(html_content):
     product_pattern = r"\<div.*?\>.*?(?<=\<\/p\>.)\</div\>"
     product_blocks = re.findall(product_pattern, html_content, re.DOTALL)
     # название продукта
-    title_pattern = re.compile(r"\<h2 class\=\"product-title\"\>(.*?)\<\/h2\>")
+    title_pattern = re.compile(r"(?<=\<h2 class\=\"product-title\"\>).*?(?=\<\/h2\>)")
     # цена
-    price_pattern = re.compile(r"\<span class\=\"price\"\>(.*?)\<\/span\>")
+    price_pattern = re.compile(r"(?<=\<span class\=\"price\"\>).*?(?=\<\/span\>)")
     # скидка
-    discount_pattern = re.compile(r"\<span class\=\"discount\"\>(.*?)\<\/span\>")
+    discount_pattern = re.compile(r"(?<=\<span class\=\"discount\"\>).*?(?=\<\/span\>)")
     # наличие
-    stock_pattern = re.compile(r"\<p class\=\"stock\"\>(.*?)\<\/p\>")
+    stock_pattern = re.compile(r"(?<=\<p class\=\"stock\"\>).*?(?=\<\/p\>)")
     for product_block in product_blocks:
         # print(product_block)
         # print()
         #  Извлеките название продукта
         title_match = title_pattern.search(product_block)
-        title = title_match.group(1)
+        title = title_match.group() if title_match else 'Нет названия'
+        print(title)
        
         #  Извлеките цену
         price_match = price_pattern.search(product_block)
-        price = price_match.group(1)
+        price = price_match.group() if price_match else 'Нет цены'
 
         #  Извлеките скидку (если есть)
         discount_match = discount_pattern.search(product_block)
-        if discount_match:
-            discount = discount_match.group(1) if discount_match else 'Нет скидки'
+        discount = discount_match.group() if discount_match else 'Нет скидки'
 
         #  Проверьте наличие
         stock_match = stock_pattern.search(product_block)
-        stock = stock_match.group(1)
+        stock = stock_match.group() if stock_match else 'Нет данных о наличии'
         # print(title)
         # print(int(price.split()[0]) < 5000)
         # print(stock)
         
         #  Добавьте продукт в результат, если он соответствует критериям(в наличии и стоит меньше 5000 руб.)
-        if stock == 'В наличии' and int(price.split()[0]) < 5000:
-            affordable_in_stock_products.append({'Название': title, 'Цена': price, 'Скидка': discount, 'Наличие': stock})
+        try:
+            if stock == 'В наличии' and int(price.split()[0]) < 5000:
+                affordable_in_stock_products.append({'Название': title, 'Цена': price, 'Скидка': discount, 'Наличие': stock})
+        except (ValueError, IndexError):
+            pass
+        
     return affordable_in_stock_products
 
 
@@ -92,6 +96,8 @@ html_content = """
 products = extract_product_info(html_content)
 # print(products)
 for product in products:
-    for key, value in product.items():
-        print(f"{key}: {value}")
+    print('Название:', product['Название'])
+    print('Цена:', product['Цена'])
+    print('Скидка:', product['Скидка'])
+    print('Наличие:', product['Наличие'])
     print() # Пустая строка для разделения продуктов
