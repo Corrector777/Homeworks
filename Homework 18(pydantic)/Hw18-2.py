@@ -18,8 +18,10 @@ status_data_full = {
 status_data_minimal = {
     "unit_id": "SPX-11-DELTA",
     "energy_level": 95
-# last_patrol_zone и operational_mode не переданы
-}
+    # last_patrol_zone и operational_mode не переданы
+    }
+
+
 # --- Модели ---
 # ТВОЙ КОД ЗДЕСЬ: Определи класс UnitStatus
 # - unit_id: str (обязательное)
@@ -32,16 +34,17 @@ class UnitStatus(BaseModel):
     last_patrol_zone: Optional[str] = None
     operational_mode: str = "Patrol"
 
+
 # --- Логика скрипта ---
 print("--- Задание 2: Статус Оперативности ---")
 # UnitStatus = None # Заглушка, чтобы код ниже не падал сразу
 # ВАЖНО: Когда ты определишь класс UnitStatus выше, удали или закомментируй эту строку
 if UnitStatus is not None: # Проверяем, определен ли класс
     try:
-    # ТВОЙ КОД ЗДЕСЬ: Создай экземпляр status_1 из status_data_full
+        # ТВОЙ КОД ЗДЕСЬ: Создай экземпляр status_1 из status_data_full
         status_1 = UnitStatus(**status_data_full)  # Замени None
         print("Статус 1 (Полные данные):")
-    # ТВОЙ КОД ЗДЕСЬ: Выведи результат model_dump() для status_1
+        # ТВОЙ КОД ЗДЕСЬ: Выведи результат model_dump() для status_1
         print(status_1.model_dump() if status_1 else "Экземпляр status_1 не создан")
     except ValidationError as e:
         print(f"Ошибка при создании status_1:\n{e}")
@@ -49,10 +52,10 @@ if UnitStatus is not None: # Проверяем, определен ли кла�
         print(f"Другая ошибка при обработке status_1: {e}")
     print("-" * 20)
     try:
-    # ТВОЙ КОД ЗДЕСЬ: Создай экземпляр status_2 из status_data_minimal
+        # ТВОЙ КОД ЗДЕСЬ: Создай экземпляр status_2 из status_data_minimal
         status_2 = UnitStatus(**status_data_minimal) # Замени None
         print("Статус 2 (Минимальные данные):")
-    # ТВОЙ КОД ЗДЕСЬ: Выведи результат model_dump() для status_2
+        # ТВОЙ КОД ЗДЕСЬ: Выведи результат model_dump() для status_2
         print(status_2.model_dump() if status_2 else "Экземпляр status_2 не создан")
     except ValidationError as e:
         print(f"Ошибка при создании status_2:\n{e}")
