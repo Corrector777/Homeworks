@@ -59,12 +59,12 @@ class GeneticConstructor:
         method_name = self.set_species.__name__
         if self.validate_access_code(access_code, required_level, method_name):         
             self._species = value
-            self._modification_history.append(f'{self._creation_date.strftime("%Y-%m-%d %H:%M:%S")} {method_name}: Изменен вид на: {self._species}\n')  
+            self._modification_history.append(f'{self._creation_date.strftime("%Y-%m-%d %H:%M:%S")} {method_name}: Изменен вид на: {self._species} ({access_code})\n')  
         else:
             return f'[Доступ запрещен] Необходим уровень доступа не ниже: {required_level}'
 
     def get_lead_scientist(self, access_code, required_level='restricted'):
-        method_name = self.get_species.__name__
+        method_name = self.set_lead_scientist.__name__
         if self.validate_access_code(access_code, required_level, method_name):
             return self._lead_scientist
         else:
@@ -74,7 +74,7 @@ class GeneticConstructor:
         method_name = self.set_lead_scientist.__name__
         if self.validate_access_code(access_code, required_level, method_name):
             self._lead_scientist = value
-            self._modification_history.append(f'{self._creation_date.strftime("%Y-%m-%d %H:%M:%S")} {method_name}: Изменен руководитель на: {self._lead_scientist}\n')
+            self._modification_history.append(f'{self._creation_date.strftime("%Y-%m-%d %H:%M:%S")} {method_name}: Изменен руководитель на: {self._lead_scientist} ({access_code})\n')
         else:
             return f'[Доступ запрещен] Необходим уровень доступа не ниже: {required_level}'
 
@@ -92,7 +92,7 @@ class GeneticConstructor:
         method_name = self.set_dna_sequence.__name__
         if self.validate_access_code(access_code, required_level, method_name):
             self.__dna_sequence = new_sequence
-            self._modification_history.append(f'{self._creation_date.strftime("%Y-%m-%d %H:%M:%S")} {method_name}: Изменен DNA на: {self.__dna_sequence}\n')
+            self._modification_history.append(f'{self._creation_date.strftime("%Y-%m-%d %H:%M:%S")} {method_name}: Изменен DNA на: {self.__dna_sequence} ({access_code})\n')
         else:
             return f'[Доступ запрещен] Необходим уровень доступа не ниже: {required_level}'
     
@@ -107,8 +107,8 @@ class GeneticConstructor:
     def set_stability_factor(self, access_code, value, required_level='confidential'):
         method_name = self.set_stability_factor.__name__
         if self.validate_access_code(access_code, required_level, method_name):
-            self._modification_history.append(f'{self._creation_date.strftime("%Y-%m-%d %H:%M:%S")} {method_name}: Изменен коэффициент стабильности на: {self.__stability_factor}\n')
             self.__stability_factor = value
+            self._modification_history.append(f'{self._creation_date.strftime("%Y-%m-%d %H:%M:%S")} {method_name}: Изменен коэффициент стабильности на: {self.__stability_factor} ({access_code})\n')     
         else:
             return f'[Доступ запрещен] Необходим уровень доступа не ниже: {required_level}'
 
@@ -123,8 +123,9 @@ class GeneticConstructor:
     def set_mutation_probability(self, access_code, value, required_level='confidential'):
         method_name = self.set_mutation_probability.__name__
         if self.validate_access_code(access_code, required_level, method_name):
-            self._modification_history.append(f'{self._creation_date.strftime("%Y-%m-%d %H:%M:%S")} {method_name}: Изменена вероятность мутации на: {self.__mutation_probability}\n')            
             self.__mutation_probability = value
+            self._modification_history.append(f'{self._creation_date.strftime("%Y-%m-%d %H:%M:%S")} {method_name}: Изменена вероятность мутации на: {self.__mutation_probability} ({access_code})\n')            
+            
 
     # Ваш код: создайте метод add_gene_modification(access_code, modification)
     # Который добавляет новую модификацию гена при наличии нужного уровня доступа
@@ -132,6 +133,7 @@ class GeneticConstructor:
         method_name = self.add_gene_modification.__name__
         if self.validate_access_code(access_code, required_level, method_name):
             self.__gene_modifications.append(modification)
+            self._modification_history.append(f'{self._creation_date.strftime("%Y-%m-%d %H:%M:%S")} {method_name}: Добавлена модификация гена: {modification} ({access_code})\n')
         else:
             return f'[Доступ запрещен] Необходим уровень доступа не ниже: {required_level}'
 
@@ -196,3 +198,7 @@ if __name__ == "__main__":
    
     # # Выводим статистику несанкционированных попыток
     print(f"Несанкционированных попыток доступа: {trex_project._unauthorized_attempts}")
+
+    print('\n\nИстория изменений:\n')
+    for i in trex_project._modification_history:
+        print(i)
