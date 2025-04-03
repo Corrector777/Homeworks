@@ -73,11 +73,11 @@ class DinoHealthMonitor:
             if self.check_parameter(value, DinoHealthMonitor.NORMAL_RANGES[metric]) == "critical":
                 start_tip = 'КРИТИЧНО'
                 if metric == "temperature":
-                    alerts.append(f"{start_tip}: Опасно высокая температура: {value}°C")
+                    alerts.append(f"{start_tip}: Опасно высокая температура: {value} °C")
                 elif metric == "heart_rate":
-                    alerts.append(f"{start_tip}: Опасно высокий пульс: {value}уд/мин")
+                    alerts.append(f"{start_tip}: Опасно высокий пульс: {value} уд/мин")
                 elif metric == "oxygen_level":
-                    alerts.append(f"{start_tip}: Опасно низкий уровень кислорода: {value}%")
+                    alerts.append(f"{start_tip}: Опасно низкий уровень кислорода: {value} %")
                 elif metric == "brain_activity":
                     alerts.append(f"{start_tip}: Критически низкая активность мозга: {value}")
                 elif metric == "dna_stability":
@@ -101,16 +101,41 @@ class DinoHealthMonitor:
     def analyze_trends(self):
         trends = {}
         if len(self.history) > 1:
-            for metric, value in self.history[0].items():            
-                last_value = self.history[len(self.history) - 1][metric]
-                if (last_value - value) > 3:                    
-                    trends[metric] = f"ухудшение (↑) +{format((last_value - value),'.1f')}"
-                elif (last_value - value) < - 3:
-                    trends[metric] = f"ухудшение(↓) -{format((value - last_value),'.1f')}"
+            first_metrics = self.history[0]
+            last_metrics = self.history[-1]
+            for metric, value in first_metrics.items():
+                first_value = first_metrics[metric]
+                last_value = last_metrics[metric]
+                value_change = last_value - first_value            
+                if metric == "temperature":
+                    if value_change > 0:
+                        trends[metric] = f"Ухудшение (↑) +{abs(value_change):.1f} °C"                    
+                    elif value_change < 0:
+                        trends[metric] = f"Ухудшение(↓) -{abs(value_change):.1f} °C"
+                elif metric == "heart_rate":
+                    if value_change > 0:
+                        trends[metric] = f"Ухудшение(↑) +{abs(value_change):.1f} уд/мин"
+                    elif value_change < 0:
+                        trends[metric] = f"Ухудшение(↓) -{abs(value_change):.1f} уд/мин"
+                elif metric == "oxygen_level":
+                    if value_change > 0:
+                        trends[metric] = f"Ухудшение(↑) +{abs(value_change):.1f} %"
+                    elif value_change < 0:
+                        trends[metric] = f"Ухудшение(↓) -{abs(value_change):.1f} %"
+                elif metric == "brain_activity":
+                    if value_change > 0:                    
+                        trends[metric] = f"Ухудшение(↑) +{abs(value_change):.1f}"
+                    elif value_change < 0:
+                        trends[metric] = f"Ухудшение(↓) -{abs(value_change):.1f}"
+                elif metric == "dna_stability":
+                    if value_change > 0:
+                        trends[metric] = f"Ухудшение(↑) +{abs(value_change):.1f}"
+                    elif value_change < 0:
+                        trends[metric] = f"Ухудшение(↓) -{abs(value_change):.1f}"
                 else:
                     trends[metric] = "Изменения в норме"
         else:
-            raise AttributeError('Изменений нет')
+            raise AttributeError('Изменений не зарегистрированно')
         return trends
 
 
@@ -119,19 +144,19 @@ class DinoHealthMonitor:
     def __str__(self):
         outlines = [f"ID: {self.dino_id} ({self.species}, {self.age})"]
         outlines.append(f'Статус здоровья: {self.status}')
+        status = self.check_parameter(self.health_metrics["temperature"], DinoHealthMonitor.NORMAL_RANGES["temperature"])
         for metric, value in self.health_metrics.items():
             if metric == "temperature":
-                outlines.append(f"Температура: {value}°C")
+                outlines.append(f"Температура: {value}°C ({status})")
             elif metric == "heart_rate":
-                outlines.append(f"Пульс: {value}уд/мин")
+                outlines.append(f"Пульс: {value} уд/мин ({status})")
             elif metric == "oxygen_level":
-                outlines.append(f"Уровень кислорода: {value}%")
+                outlines.append(f"Уровень кислорода: {value}% ({status})")
             elif metric == "brain_activity":
-                outlines.append(f"Активность мозга: {value}")
+                outlines.append(f"Активность мозга: {value} ({status})")
             elif metric == "dna_stability":
-                outlines.append(f"Стабильность ДНК: {value}")
+                outlines.append(f"Стабильность ДНК: {value} ({status})")
         return "\n".join(outlines)
-
 
     @staticmethod
     def check_parameter(value, normal_range):
@@ -139,7 +164,7 @@ class DinoHealthMonitor:
         min_val, max_val = normal_range
         if min_val <= value <= max_val:
             return "normal"
-        elif value < min_val * 0.8 or value > max_val * 1.1:
+        elif value < min_val * 0.8 or value > max_val * 1.2:
             return "critical"
         else:
             return "warning"
