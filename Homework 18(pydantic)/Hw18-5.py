@@ -1,15 +1,15 @@
 # task_5_serialization.py
-from pydantic import BaseModel, Field, ValidationError # Не забудь Field
-import pprint # Для красивого вывода словаря
+from pydantic import BaseModel, Field, ValidationError  # Не забудь Field
+import pprint  # Для красивого вывода словаря
 
 
 # --- Данные для лога юнита Анубис ---
 log_data = {
-"unit_id": "ANU-01-ISIS",
-"status": "Scanning Sector-Zeta",
-"location": "Inner Chamber Coordinates [11.3, -25.7, 8.0]",
-"calibration_key": "AX7-j#pL$q9@zRtY" # Этот ключ не должен попасть в лог
-}
+    "unit_id": "ANU-01-ISIS",
+    "status": "Scanning Sector-Zeta",
+    "location": "Inner Chamber Coordinates [11.3, -25.7, 8.0]",
+    "calibration_key": "AX7-j#pL$q9@zRtY"  # Этот ключ не должен попасть в лог
+    }
 
 
 # --- Модели ---
@@ -29,7 +29,7 @@ class AnubisUnitLog(BaseModel):
 print("--- Задание 5: Экспорт Данных для Лога ---")
 # AnubisUnitLog = None # Заглушка
 # ВАЖНО: Когда ты определишь класс AnubisUnitLog выше, удали или закомментируй эту строку
-anubis_log = None # Инициализация
+anubis_log = None  # Инициализация
 log_dict = None
 log_json = None
 if AnubisUnitLog is not None:
