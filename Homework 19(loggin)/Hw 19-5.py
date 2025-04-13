@@ -77,7 +77,7 @@ def connect_and_transfer(server_address):
         try:
             raise TimeoutError("Failed to establish connection: Server timeout")
         except TimeoutError as e:
-            bound_logger.error(e)
+            bound_logger.exception(e)
         return False
     # TODO: Используй bound_logger для логирования успешного соединения (INFO)
     bound_logger.info("Connection established")
@@ -91,7 +91,7 @@ def connect_and_transfer(server_address):
         except ConnectionError as e:
             # TODO: Используй bound_logger для логирования ошибки передачи (ERROR)
             # loguru поймает исключение внутри except блока
-            bound_logger.error(e)
+            bound_logger.exception(e)
             success = False
             break  # Прерываем передачу при ошибке
         except Exception as e:
