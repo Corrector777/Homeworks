@@ -53,7 +53,7 @@ def generate_session_id():
 
 
 def send_data_packet(bound_logger, packet_no, data_size):
-    #TODO: Используй bound_logger для логирования отправки пакета (DEBUG)
+    # TODO: Используй bound_logger для логирования отправки пакета (DEBUG)
     bound_logger.debug(f"Sending data packet {packet_no} with size {data_size}")
     time.sleep(random.uniform(0.05, 0.2))
     # Имитация возможной ошибки передачи
