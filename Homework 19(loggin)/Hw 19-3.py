@@ -34,7 +34,7 @@ logger.setLevel(logging.INFO)
 handler = logging.StreamHandler(sys.stdout)
 # TODO: Создай JsonFormatter (включи 'timestamp', 'level', 'name', 'message', переименуй levelname->level)
 formatter = jsonlogger.JsonFormatter(
-    '%(timestamp)s %(levelname)s %(name)s %(message)s',
+    '%(asctime)s %(levelname)s %(name)s %(message)s',
     rename_fields={'levelname': 'level', 'asctime': 'timestamp'},
     datefmt='%Y-%m-%dT%H:%M:%S.%fZ',
     json_ensure_ascii=False
@@ -70,6 +70,7 @@ def process_transaction(transaction):
     if tx_type == 'transfer':
         # TODO: Залогируй INFO "Обработана транзакция" и передай ВСЕ поля транзакции в 'extra'
         log_extra = transaction.copy() # Копируем, чтобы не модифицировать оригинал, если нужно
+        log_extra['transaction_timestamp'] = log_extra.pop('timestamp')
         logger.info(f"Обработана транзакция {tx_id}", extra=log_extra)  # Передаем в extra все поля транзакции (transaction)
         # Имитация какой-то полезной работы
         time.sleep(random.uniform(0.05, 0.15))
@@ -77,6 +78,7 @@ def process_transaction(transaction):
     else:
         # TODO: Залогируй WARNING "Неизвестный тип транзакции" и передай ВСЕ поля транзакции в 'extra'
         log_extra = transaction.copy()
+        log_extra['transaction_timestamp'] = log_extra.pop('timestamp')
         logger.warning(f"Неизвестный тип транзакции {tx_id}", extra=log_extra)
         return False
     
