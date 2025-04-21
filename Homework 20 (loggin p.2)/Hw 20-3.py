@@ -37,8 +37,6 @@ def namer(name):
     splitted_name = name.split('.')
     base = splitted_name[0]
     ext = splitted_name[1]
-    index = splitted_name[-1]
-    print('LEN', len(splitted_name), 'base=', base, 'ext=', ext, 'index=', index) 
     # TODO: собрать новое имя base + '.' + timestamp + ext
     new_name = f'{base}.{time.strftime('%Y-%m-%d_%H-%M-%S')}.{ext}' 
     # TODO: вернуть новое имя
