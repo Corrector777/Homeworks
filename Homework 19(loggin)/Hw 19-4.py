@@ -74,7 +74,7 @@ def scan_port(host, port):
 
 def attempt_exploit(host, port, exploit):
     # TODO: Логируй попытку применения эксплойта (DEBUG)
-    log.debug("sending_exploit", exploit_name=exploit)
+    log.debug("sending_exploit", exploit_name=exploit, target_port=port)
     time.sleep(random.uniform(0.2, 0.5))
     # Имитация ответа ICE
     if random.random() < 0.4:  # 40% шанс наткнуться на ICE
@@ -87,12 +87,12 @@ def attempt_exploit(host, port, exploit):
     if random.random() < 0.7:  # 70% шанс успеха (если нет ICE)
         access = random.choice(["user", "admin"])
         # TODO: Логируй успешный эксплойт (INFO)
-        log.info("breach_successful", port=port, access_level=access)
+        log.info("exploit_successful", port=port, access_level=access)
         return access  # Успех, возвращаем уровень доступа
     else:
         # TODO: Логируй неудачу эксплойта (ERROR)
         reason = random.choice(["ice_too_strong", "exploit_patched", "connection_lost"])  # Причина неудачи прорыва 
-        log.error('breach_failed', exploit_name=exploit, reason=reason)    
+        log.error('exploit_failed', exploit_name=exploit, reason=reason)    
         return "fail"
     
 
