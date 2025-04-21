@@ -22,7 +22,8 @@ from logging.handlers import RotatingFileHandler
 Файл battle.log не удаляется
 NAMER принимает name = 'battle.log.1'(с цифрой на конце)! Специально запринтил
 source в ROTATOR передается как battle.log (БЕЗ цифры на конце). Специально запринтил!
-  
+Размер MaxBytes = 1*102  - СПЕЦИАЛЬНО уменьшил для наглядности
+Количество симуляций СПЕЦИАЛЬНО увеличил
 
 def namer(name):
     print(f"NAMER: Received name = '{name}'")
@@ -31,9 +32,10 @@ def namer(name):
     splitted_name = name.split('.')
     base = splitted_name[0]
     ext = splitted_name[1]
-    print('LEN', len(splitted_name), splitted_name)
+    index = splitted_name[-1]
+    print('LEN', len(splitted_name), 'base=', base, 'ext=', ext, 'index=', index) 
     # TODO: собрать новое имя base + '.' + timestamp + ext
-    new_name = f'{base}.{time.strftime('%Y-%m-%d_%H-%M-%S')}.{ext}'
+    new_name = f'{base}.{time.strftime('%Y-%m-%d_%H-%M-%S')}.{ext}' 
     # TODO: вернуть новое имя
     print('NAMER: New name = ', new_name)
     return new_name
@@ -41,14 +43,18 @@ def namer(name):
 
 def rotator(source, dest):
     print(f"ROTATOR: Source file = '{source}', Dest file = '{dest}'")
-    # TODO: открыть source для чтения в бинарном режиме
-    with open(source, 'rb') as f:
-        text = f.readlines()
-        # TODO: открыть gzip-архив dest+'.gz' для записи
-        with gzip.open(f"{dest}.gz", 'wb') as g:
-            # TODO: скопировать данные и удалить source
-            g.writelines(text)
-    os.remove(source)  # НЕ РАБОТАЕТ!!!
+    try:
+        # TODO: открыть source для чтения в бинарном режиме
+        with open(source, 'rb') as f:
+            # TODO: открыть gzip-архив dest+'.gz' для записи
+            with gzip.open(f"{dest}.gz", 'wb') as g:
+                # TODO: скопировать данные и удалить source
+                g.writelines(line for line in f)
+        os.remove(source)  # НЕ РАБОТАЕТ!!!
+    except FileNotFoundError as e:
+        print(e)
+    except Exception as e:
+        print(e)
 
 
 # TODO: создать RotatingFileHandler:
@@ -57,7 +63,7 @@ def rotator(source, dest):
 #   - backupCount = 3
 handler = RotatingFileHandler(
     'battle.log',
-    maxBytes=1*300,
+    maxBytes=1 * 102,
     backupCount=3
 )
 # TODO: присвоить handler.namer = namer и handler.rotator = rotator
@@ -73,7 +79,7 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 # --- Симуляция: 30 критических ошибок ---
-for i in range(30):
+for i in range(50):
     # TODO: вызвать logger.error с текстом "Critical battle error #{i}"
     logger.error(f"Critical battle error #{i}")
     print(f"Simulate critical battle error #{i}")
