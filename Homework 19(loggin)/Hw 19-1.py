@@ -60,7 +60,7 @@ def check_network_link():
         logging.debug("Соединение устанавливается...")
         time.sleep(latency / 10)
     else:
-        logging.warning("Соединение не установлено!")    
+        logging.debug("Соединение не установлено!")    
     logging.debug("Проверка сетевого соединения завершена.")
     return connection_status
 

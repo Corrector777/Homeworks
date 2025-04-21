@@ -28,6 +28,7 @@ logging.basicConfig(
     format='%(asctime)s - [%(levelname)s] - %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S'
 )
+logger = logging.getLogger(__name__)
 # --- КОНЕЦ НАСТРОЙКИ ЛОГИРОВАНИЯ ---
 #Имитация разных дата-шардов от Реджины
 shards_data = [
@@ -41,7 +42,7 @@ shards_data = [
 
 def decrypt_and_process(shard_data):
     shard_id = shard_data.get("id", "unknown_shard")
-    logging.info(f"Начало обработки шарда: {shard_id}")
+    logger.info(f"Начало обработки шарда: {shard_id}")
     try:
         # Проверяем наличие ключевых полей
         if "payload" not in shard_data:
@@ -52,30 +53,30 @@ def decrypt_and_process(shard_data):
             raise KeyError("Отсутствует обязательное поле 'encryption_key'")
         # Проверяем наличие необязательного поля
         if "optional_notes" not in shard_data:
-            logging.warning(f"В шарде {shard_id} отсутствует необязательное поле 'optional_notes'.")
+            logger.warning(f"В шарде {shard_id} отсутствует необязательное поле 'optional_notes'.")
 
         # Имитация процесса расшифровки, который может вызвать ошибку
         payload = shard_data['payload']
         key = shard_data['encryption_key']
-        logging.debug(f"Используем ключ {key} для расшифровки...")  # Не выведется, так как уровень DEBUG не установлен
+        logger.debug(f"Используем ключ {key} для расшифровки...")  # Не выведется, так как уровень DEBUG не установлен
         time.sleep(random.uniform(0.1, 0.4))  # Имитация работы
         if shard_data.get("checksum") == "bad":
             # logging.error(f"Oшибка обработки {shard_id}")  # думаю, что тут этот лог излишен. так как логируется внизу
             raise ValueError("Ошибка целостности данных при расшифровке")
         decrypted_data = f"Расшифровано: '{payload}'"
-        logging.info(f"Шард {shard_id} успешно обработан. Данные: {decrypted_data}")
+        logger.info(f"Шард {shard_id} успешно обработан. Данные: {decrypted_data}")
         return decrypted_data
     except KeyError as e:
         # Ошибки KeyError уже должны быть залогированы выше, но можно добавить финальный лог здесь, если нужно
-        logging.error(f"Критическая ошибка обработки {shard_id}: {e}", exc_info=True)  # Простой лог, т.к. traceback уже есть
+        logger.error(f"Критическая ошибка обработки {shard_id}: {e}", exc_info=True)  # Простой лог, т.к. traceback уже есть
         return None
     except ValueError as e:
         # Ошибки ValueError уже должны быть залогированы выше
-        logging.error(f"Критическая ошибка обработки {shard_id}: {e}", exc_info=True)  # Простой лог, т.к. traceback уже есть
+        logger.error(f"Критическая ошибка обработки {shard_id}: {e}", exc_info=True)  # Простой лог, т.к. traceback уже есть
         return None
     except Exception as e:
         # Ловим любые другие неожиданные ошибки
-        logging.critical(f"Непредвиденная критическая ошибка при обработке {shard_id}: {e}", exc_info=True)
+        logger.critical(f"Непредвиденная критическая ошибка при обработке {shard_id}: {e}", exc_info=True)
         return None
 
 
