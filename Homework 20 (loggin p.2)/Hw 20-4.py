@@ -2,7 +2,8 @@ import logging, logging.handlers, multiprocessing
 
 ## **Задание 4. “Собираем весь флот”**
 # **Сюжет:**
-# Архивариус агрегирует логи с трёх подсистем USS “Энтерпрайз” (двигатели, оружие, навигация), приходящие параллельно. Центральный процесс‑слушатель безопасно ротирует общий файл.
+# Архивариус агрегирует логи с трёх подсистем USS “Энтерпрайз” (двигатели, оружие, навигация), приходящие параллельно. 
+# Центральный процесс‑слушатель безопасно ротирует общий файл.
 # **ТЗ:**
 
 # 1. listener_configurer():
@@ -16,16 +17,28 @@ import logging, logging.handlers, multiprocessing
 
 
 def listener_configurer():
+    root = logging.getLogger()
     # TODO: создать обработчик с ротацией по размеру и задать формат
+    handler = logging.handlers.RotatingFileHandler(
+        'fleet.log',
+        maxBytes=100*1024,
+        backupCount=5   
+    )
     # TODO: добавить его в корневой логгер
-    pass
+    root.addHandler(handler)
+
 
 def listener_process(queue):
     listener_configurer()
     while True:
         record = queue.get()
         # TODO: если record is None — выйти из цикла
-        # TODO: иначе передать запись в соответствующий логгер
+        if record is None:
+            break
+        # ну это все ваще непонятно)) да и рановато. инфы в уроке нет-на будущее, видать... 
+        logger = logging.getLogger(record.name)
+        logger.handle(record) 
+
 
 ### **worker.py**
 
@@ -46,9 +59,14 @@ def listener_process(queue):
     
 import logging, logging.handlers, multiprocessing, time
 
+
 def worker_configurer(queue):
     # TODO: создать и прикрепить QueueHandler, установить level=DEBUG
-    pass
+    handler = logging.handlers.QueueHandler(queue)
+    root = logging.getLogger()
+    root.addHandler(handler)
+    root.setLevel(logging.DEBUG)
+
 
 def worker_process(queue, name):
     worker_configurer(queue)
@@ -56,13 +74,39 @@ def worker_process(queue, name):
     # --- Симуляция: 20 сообщений от подсистемы ---
     for i in range(20):
         # TODO: вызвать logger.info(f"{name}: message #{i}")
+        logger.info(f"{name}: message #{i}")    
         print(f"{name}: simulated log #{i}")
         time.sleep(0.1)
 
+
 if __name__ == '__main__':
     # TODO: создать multiprocessing.Queue()
+    queue = multiprocessing.Queue()
     # TODO: запустить listener_process в отдельном процессе
+    listener = multiprocessing.Process(
+        target=listener_process,
+        args=(queue,)
+        )
+    listener.start()
     # TODO: запустить три worker-процесса ('engines','weapons','navigation')
+    workers = ['engines', 'weapons', 'navigation']
+    engines = multiprocessing.Process(
+        target=worker_process,
+        args=(queue, 'engines'))
+    weapons = multiprocessing.Process(
+        target=worker_process,
+        args=(queue, 'weapons'))
+    navigation = multiprocessing.Process(
+        target=worker_process,
+        args=(queue, 'navigation'))    
+    engines.start()
+    weapons.start()
+    navigation.start()
     # TODO: дождаться их завершения, отправить None в очередь и дождаться listener
-    pass
-```
+    for proccess in [engines, weapons, navigation]:
+        proccess.join()
+    queue.put(None)
+    listener.join()
+
+
+  
