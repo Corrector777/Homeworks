@@ -270,7 +270,7 @@ def main_menu():
                 input("Нажмите Enter…")
 
             elif choice == '5':
-                new_city = input("Новый город по умолчанию: ").strip()
+                new_city = input("Новый город по умолчанию: ").strip().capitalize()
                 if any(char.isdigit() for char in new_city):
                     raise ValueError('Ошибка! Город не может быть числом')
                 cfg['default_city'] = new_city or cfg['default_city']
