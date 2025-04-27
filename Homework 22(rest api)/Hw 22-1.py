@@ -2,8 +2,6 @@ import json
 import requests
 from datetime import datetime
 import os
-import re
-
 
 # === Загрузка/сохранение настроек ===
 def load_config() -> dict:
