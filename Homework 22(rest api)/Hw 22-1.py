@@ -220,6 +220,7 @@ def ask_days():
 
 # # === Меню и ввод пользователя ===
 def main_menu():
+    """Основное меню программы"""
     cfg = load_config()
     while True:
         try:
