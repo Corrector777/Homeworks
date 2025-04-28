@@ -264,8 +264,6 @@ def main_menu():
                     raise ValueError('Ошибка! Введите два значения температуры через пробел')   
                 cond.sort(key=float)
                 print(f'\nУсловия установлены: мин.темп: {cond[0]}, макс.темп: {cond[1]}\n')
-                lat, lon = geocode(cfg['default_city'])
-                data = get_current(lat, lon)
                 set_alert(cfg, cond)
                 input("Нажмите Enter…")
 
