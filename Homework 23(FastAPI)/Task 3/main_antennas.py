@@ -12,4 +12,4 @@ async def antennas(skip: int = 0, limit: int = 10):
 
 
 if __name__ == "__main__":  
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8002)
