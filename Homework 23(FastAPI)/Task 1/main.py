@@ -10,7 +10,7 @@ async def root():
 @app.get("/ping/{station_code}")
 async def ping(station_code: str):
     if not station_code or len(station_code) < 3:
-        raise HTTPException(status_code=400, detail="Invalid station code")
+        raise HTTPException(status_code=400, detail="Код станции должен состоять не менее чем из 3 символов")
     return {"station": station_code, "reply": "pong"}
 
 if __name__ == "__main__":  
