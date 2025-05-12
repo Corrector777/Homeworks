@@ -22,5 +22,5 @@ async def channels(station_code: str, active_only: bool = False):
     return {"station": station_code, "channels": [{'id': channel["id"], 'freq': channel["freq"]} for channel in channels_db]}
 
 if __name__ == "__main__":  
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8001)
 
