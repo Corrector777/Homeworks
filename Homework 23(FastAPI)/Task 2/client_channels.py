@@ -1,4 +1,5 @@
 import requests
+from requests.exceptions import RequestException
 
 exit = {"нет", "no", 'н', 'n'}
 
@@ -14,14 +15,27 @@ while True:
     
     match channels_status:
         case 'да':
-            print("\nАктивные каналы")
-            response = requests.get(url, params={"active_only": True})
-            print(response.json())
+            try:
+                print("\nАктивные каналы")
+                response = requests.get(url, params={"active_only": True})
+                response.raise_for_status()
+                print(response.json())
+            except RequestException as err:
+                print(f"Request error: {err}")
+                if err.response is not None:
+                    print(f"Status code: {err.response.status_code}")
+                    print(f"Response text: {err.response.text}")
         case 'нет' | '':
-            print("\nВсе каналы")      
-
-            response = requests.get(url, params={"active_only": False})
-            print(response.json())
+            try:
+                print("\nВсе каналы")
+                response = requests.get(url, params={"active_only": False})
+                response.raise_for_status()
+                print(response.json())
+            except RequestException as err:
+                print(f"Request error: {err}")
+                if err.response is not None:
+                    print(f"Status code: {err.response.status_code}")
+                    print(f"Response text: {err.response.text}")
         case _:
             print("Некорректный ввод")
     break_point = input('\nПродолжаем(нет/любой ввод = да)?\n')
