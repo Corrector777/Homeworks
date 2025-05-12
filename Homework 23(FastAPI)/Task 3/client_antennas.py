@@ -1,0 +1,27 @@
+import requests
+from requests.exceptions import RequestException
+
+antennas_list: list[dict] = []
+current_skip = 0
+current_limit = 10
+while len(antennas_list) < 50:
+    url = "http://127.0.0.1:8000/antennas/"
+    params = {
+        "skip": current_skip,
+        "limit": current_limit
+    }
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status()
+        antennas_list += response.json()["items"]
+        print(f'{current_limit} антенн от {current_skip} до {current_skip + current_limit} добавлены')
+        current_skip += current_limit
+    except RequestException as err:
+        print(f"Request error: {err}")
+        if err.response is not None:
+            print(f"Status code: {err.response.status_code}")
+            print(f"Response text: {err.response.text}")
+            break
+
+print(f'всего получено антенн: {len(antennas_list)}')
+
