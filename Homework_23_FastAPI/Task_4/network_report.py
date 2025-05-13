@@ -24,7 +24,7 @@ async def report():
     channels = None
     antennas_total = None
     if params_2["active_only"]:
-        channels_status = "active_only"
+        channels_status = "active_channels"
     else:
         channels_status = "all_channels"
     try:
