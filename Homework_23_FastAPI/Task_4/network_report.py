@@ -49,7 +49,7 @@ async def report():
                     }
                 }
                 
-    print(f'Данные для отчета: \n<"pong": {pong}, {channels_status}: {channels}, "antennas_total": {antennas_total}>')
+    print(f'Данные для отчета: \n"pong": {pong}, {channels_status}: {channels}, "antennas_total": {antennas_total}')
     return {
             'pong': pong,
             channels_status: channels,
