@@ -6,7 +6,8 @@ from requests.exceptions import RequestException
 url_1 = "http://127.0.0.1:8000/ping/Vega-11"
 url_2 = "http://127.0.0.1:8001/channels/Vega-11"
 params_2 = {
-    "active_only": True
+    "active_only": True,
+    "details": True
 }
 url_3 = "http://127.0.0.1:8002/antennas"
 params_3 = {
@@ -41,7 +42,7 @@ async def report():
         print(f"Request error: {err}")
         return {
                 'error': 'Внимание, не все запросы выполнены!',
-                'details': str(err),
+                'err_details': str(err),
                 'data': {
                     'pong': pong,
                     channels_status: channels,
@@ -50,11 +51,19 @@ async def report():
                 }
                 
     print(f'Данные для отчета: \n"pong": {pong}, {channels_status}: {channels}, "antennas_total": {antennas_total}')
-    return {
-            'pong': pong,
-            channels_status: channels,
-            'antennas_total': antennas_total
-            }
+    if params_2["details"]:
+        return {
+                'pong': pong,
+                channels_status: channels,
+                'antennas_total': response_3.json()["items"],
+                'all_channels': response_2.json()["channels"]
+                }
+    else:
+        return {
+                'pong': pong,
+                channels_status: channels,
+                'antennas_total': antennas_total
+                }
 
 
 if __name__ == "__main__":
