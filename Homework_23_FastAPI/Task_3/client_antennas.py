@@ -14,7 +14,8 @@ while len(antennas_list) < 50:
         response = requests.get(url, params=params)
         response.raise_for_status()
         antennas_list += response.json()["items"]
-        print(f'{current_limit} антенн от {current_skip + 1} до {current_skip + current_limit} добавлены')
+        print(f'{current_limit} антенн от {current_skip + 1} до {current_skip + current_limit} добавлены:')
+        print(response.json(), "\n")
         current_skip += current_limit
     except RequestException as err:
         print(f"Request error: {err}")
