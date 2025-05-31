@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from fastapi import FastAPI
 from typing import Optional, Literal
 import uvicorn
+import json
 # Твоя задача, инженер:
 # На станции "Звездный Пилигрим" тебе нужно разработать FastAPI эндпоинт /titan3/system_status , который будет принимать POST-запросы с данными о
 # состоянии систем станции "Титан-3".
@@ -62,7 +63,7 @@ class SystemStatusReport(BaseModel):
 
 @app.post("/titan3/system_status")
 async def send_system_status_report(report: SystemStatusReport):
-    '''Функция обработки данных о состоянии системы. Принимает словарь с данными о состоянии 
+    '''Функция обработки данных о состоянии системы. Принимает pydantic модель с данными о состоянии 
     системы и возвращает словарь с сообщением об успешном получении данных'''
 
     print(f"Received status for {report.system_name}: {report.status}")
