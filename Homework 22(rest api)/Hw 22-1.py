@@ -23,11 +23,11 @@ def save_config(cfg: dict):
 # === Геокодер ===
 def geocode(city: str):
     """Возвращает координаты города по его названию"""
-
     url = 'https://nominatim.openstreetmap.org/search'
     params = {'city': city, 'format': 'json'}
     # во избежанию блокировки передаем данные агента
     headers = {'User-Agent': "#ROOTCONFIG#/n.n.n (powered by Rainmeter)"}
+
     try:
         response = requests.get(url, headers=headers, params=params, timeout=10)
         response.raise_for_status()
@@ -36,7 +36,7 @@ def geocode(city: str):
         # print(f"Response geocode JSON: {response.json()}")
         lat = response.json()[0]["lat"]
         lon = response.json()[0]['lon']
-        # print('lat, lon:', lat, lon)   
+        # print('lat, lon:', lat, lon)
         return lat, lon
     except requests.exceptions.RequestException as err:
         print(f"Request error: {err}")
@@ -44,7 +44,7 @@ def geocode(city: str):
             print(f"Status code: {err.response.status_code}")
             print(f"Response text: {err.response.text}")
             return None
-
+        
 
 # === Вызовы API ===
 def get_current(lat: str, lon: str):
@@ -148,19 +148,12 @@ def display_history(data: dict):
     temp_max = data['daily']['temperature_2m_max'][0]
     temp_min = data['daily']['temperature_2m_min'][0]
     precip = data['daily']['precipitation_sum'][0]
-    print('  [ДАТА]   | Макс.темп(°C) | Мин.темп(°C) | Суммарные осадки(мм)')
-    print(f'{date} |    {temp_max}°C      |   {temp_min}°C     |  {precip} мм   ')
+    print(f'{"[ДАТА]".ljust(10)} | {"Макс.темп(°C)".ljust(13)} | {"Мин.темп(°C)".ljust(13)} | {"Суммарные осадки(мм)".ljust(12)}')
+    print(f'{str(date).ljust(10)} | {f"{str(temp_max)}°C".ljust(13)} | {f"{str(temp_min)}°C".ljust(13)} | {f"{str(precip)}мм".ljust(12)}')
 
-        
-def print_menu(cfg: dict):
-    """Выводит главное меню и текущие данные о погоде, а также оповещения(если установлены)"""
 
-    print(f"Привет! Город по умолчанию - {cfg["default_city"]}")
-    print(f"Текущая погода для города {cfg["default_city"]}:")
-    lat, lon = geocode(cfg["default_city"])
-    data = get_current(lat, lon)
-    display_current(data)
-    # Проверка оповещения и вывод уведомлений
+def alert(cfg: dict, data: dict):
+    """Выводит оповещения"""
     if 'alert' in cfg and isinstance(cfg['alert'], list):
         print(f'Условия оповещения: мин.темп: {cfg['alert'][0]}, макс.темп: {cfg['alert'][1]}')
         current_temperature = float(data['current']['temperature_2m'])
@@ -168,6 +161,24 @@ def print_menu(cfg: dict):
             print(f"\n--Внимание!Температура выше {cfg['alert'][1]} градусов!--\n")
         elif current_temperature < float(cfg['alert'][0]):
             print(f"\n--Внимание!Температура ниже {cfg['alert'][0]} градусов!--\n")
+
+def print_menu(cfg: dict):
+    """Выводит главное меню и текущие данные о погоде, а также оповещения(если установлены)"""
+
+    print(f"Привет! Город по умолчанию - {cfg['default_city']}")
+    print(f"Текущая погода для города {cfg['default_city']}:")
+    if 'coordinates' in cfg and isinstance(cfg['coordinates'], list):
+        lat = cfg['coordinates'][0]
+        lon = cfg['coordinates'][1]  
+    else:
+        lat, lon = geocode(cfg["default_city"])
+        cfg['coordinates'] = [lat, lon]
+        save_config(cfg)
+    print(f"Координаты города по умолчанию: lat: {lat}, lon: {lon}")
+    data = get_current(lat, lon)
+    display_current(data)
+    # Проверка оповещения и вывод уведомлений
+    alert(cfg, data)
 
     print("Выберите действие:")
     print("1. Текущая погода")
@@ -216,6 +227,19 @@ def ask_days():
         raise ValueError('Ошибка! Количество дней должно быть числом')
 
 
+def pause():
+    input("\nНажмите Enter, чтобы вернуться в меню…")
+
+
+def validate_date(date_str, format_str='%Y-%m-%d'):
+    """Валидация даты"""                    
+    try:
+        datetime.strptime(date_str, format_str)
+        return True
+    except ValueError:
+        return False
+    
+
 # # === Меню и ввод пользователя ===
 def main_menu():
     """Основное меню программы"""
@@ -229,7 +253,7 @@ def main_menu():
                 lat, lon = geocode(city)
                 data = get_current(lat, lon)
                 display_current(data)
-                input("Нажмите Enter…")
+                pause()
 
             elif choice == '2':
                 days = ask_days()
@@ -238,14 +262,12 @@ def main_menu():
                 data = get_forecast(lat, lon, days)
                 print(f"Прогноз на {days} дней для города {city}:")
                 display_forecast(data)
-                input("Нажмите Enter…")
+                pause()
             
             elif choice == '3':
                 date_str = input("Введите дату в формате ГГГГ-ММ-ДД: ").strip()
-                try:
-                    datetime.strptime(date_str, '%Y-%m-%d')
-                except ValueError:
-                    raise ValueError('Ошибка! Проверьте правильность ввода даты')
+                if not validate_date(date_str):
+                    raise ValueError('Ошибка! Проверьте актуальность даты или формат ввода!')
                 city = ask_city(cfg)
                 lat, lon = geocode(city)
                 data = get_history(lat, lon, date_str)
@@ -255,29 +277,31 @@ def main_menu():
                 else:
                     print(f"История на дату {date_str} для города {city}:")
                     display_history(data)
-                input("Нажмите Enter…")
+                    pause()
         
             elif choice == '4':
-                string = input("Введите масимальную и минимальную температуру через пробел в любом порядке: ").strip()
+                string = input("Введите максимальную и минимальную температуру через пробел в любом порядке: ").strip()
                 cond = string.split(' ')
                 if len(cond) != 2:
                     raise ValueError('Ошибка! Введите два значения температуры через пробел')   
                 cond.sort(key=float)
                 print(f'\nУсловия установлены: мин.темп: {cond[0]}, макс.темп: {cond[1]}\n')
                 set_alert(cfg, cond)
-                input("Нажмите Enter…")
+                pause()
 
             elif choice == '5':
                 new_city = input("Новый город по умолчанию: ").strip().capitalize()
                 if any(char.isdigit() for char in new_city):
                     raise ValueError('Ошибка! Город не может быть числом')
                 cfg['default_city'] = new_city or cfg['default_city']
+                cfg['coordinates'] = geocode(cfg['default_city'])
                 save_config(cfg)
-                input("Нажмите Enter…")
+                print(f"Город по умолчанию изменен на {cfg['default_city']}")
+                pause()
             elif choice == '0':
                 print("Выход. До встречи!")
-                if os.path.exists('config.json'):
-                    os.remove('config.json')
+                # if os.path.exists('config.json'):
+                #     os.remove('config.json')
                 break
             else:
                 print("Неверный выбор. Попробуйте ещё раз.")
@@ -287,6 +311,7 @@ def main_menu():
             print('\n', err, '\n')
         except Exception as err:
             print('\n', err, '\n')
+
 
 if __name__ == "__main__":
     main_menu()
