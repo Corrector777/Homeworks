@@ -300,8 +300,6 @@ def main_menu():
                 pause()
             elif choice == '0':
                 print("Выход. До встречи!")
-                # if os.path.exists('config.json'):
-                #     os.remove('config.json')
                 break
             else:
                 print("Неверный выбор. Попробуйте ещё раз.")
