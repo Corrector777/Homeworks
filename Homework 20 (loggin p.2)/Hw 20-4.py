@@ -24,8 +24,10 @@ def listener_configurer():
         maxBytes=100*1024,
         backupCount=5   
     )
+    handler.setFormatter(logging.Formatter('%(asctime)s | %(processName)s | %(levelname)s | %(message)s'))
     # TODO: добавить его в корневой логгер
     root.addHandler(handler)
+    root.setLevel(logging.DEBUG)
 
 
 def listener_process(queue):

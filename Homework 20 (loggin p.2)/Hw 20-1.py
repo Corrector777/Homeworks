@@ -1,7 +1,6 @@
 import logging
 from logging.handlers import RotatingFileHandler
 import time
-import os
 
 ## **Задание 1. “Первая смена архива”**
 
@@ -31,7 +30,8 @@ logger.setLevel(logging.INFO)
 handler = RotatingFileHandler(
     'engineering.log',
     maxBytes=1*1024*1024,
-    backupCount=2
+    backupCount=2,
+    encoding="utf-8"
 )
 # TODO: создать форматтер "%(asctime)s | %(levelname)s | %(message)s"
 formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(message)s')

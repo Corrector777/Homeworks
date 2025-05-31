@@ -30,6 +30,7 @@ import os
 import logging
 import pathlib
 from logging.handlers import RotatingFileHandler
+import shutil
 
 
 ARCHIEVE_LIMIT = 3
@@ -38,9 +39,10 @@ ARCHIEVE_LIMIT = 3
 def namer(name):
     print(f"NAMER: Received name = '{name}'")
     # TODO: разделить name на base и ext
-    base, ext = os.path.splitext(name)  
+    base, ext = os.path.splitext(name)
+    base_no_log = base.split('.')[0]  
     # TODO: собрать новое имя base + '.' + timestamp + ext
-    new_name = f'{base}{time.strftime("%Y-%m-%d_%H-%M-%S")}'
+    new_name = f'{base_no_log}.{time.strftime("%Y-%m-%d_%H-%M-%S")}.log'
     # TODO: вернуть новое имя
     print('NAMER: New name = ', new_name)
     return new_name
@@ -49,15 +51,12 @@ def namer(name):
 def rotator(source, dest):
     print(f"ROTATOR: Source file = '{source}', Dest file = '{dest}'")
     try:
-        # TODO: открыть source для чтения в бинарном режиме
-        with open(source, 'rb') as f_in:
-            # TODO: открыть gzip-архив dest+'.gz' для записи
-            with gzip.open(f"{dest}.gz", 'wb') as f_out:
-                # TODO: скопировать данные и удалить source
-                f_out.writelines(line for line in f_in)
+        # TODO: открыть source для чтения в бинарном режиме и dest для записи в бинарном режиме
+        with open(source, 'rb') as f_in, gzip.open(f"{dest}.gz", 'wb') as f_out:
+            shutil.copyfileobj(f_in, f_out)
         os.remove(source)  # удаляет переполненный файл
         # TODO: ограничить количество архивов
-        archives = sorted(glob.glob("battle.*.gz"), key=os.path.getmtime)
+        archives = sorted(pathlib.Path(dest).parent.glob("battle.*.gz"), key=os.path.getmtime)
         if len(archives) > ARCHIEVE_LIMIT:
             os.remove(archives[0])
     except FileNotFoundError as e:
@@ -94,13 +93,16 @@ for i in range(60):
     print(f"Simulate critical battle error #{i}")
     time.sleep(0.1)
 
-main_path = '/Users/roman/Git/Vs-Code/Ferapontov/'
+def archieves_remove():
+    main_path = '/Users/roman/Git/Vs-Code/Ferapontov/'
 
+    log_path = pathlib.Path(main_path).glob('*.log') 
+    for path in log_path:
+        path.unlink()
 
-log_path = pathlib.Path(main_path).glob('*.log') 
-for path in log_path:
-    path.unlink()
+    gz_path = pathlib.Path(main_path).glob('*.gz')
+    for path in gz_path:
+        path.unlink()
 
-gz_path = pathlib.Path(main_path).glob('*.gz')
-for path in gz_path:
-    path.unlink()
+if __name__ == '__main__':
+    archieves_remove()
