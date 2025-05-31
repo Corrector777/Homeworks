@@ -9,7 +9,7 @@ while True:
     if len(station_code) < 1:
         print("Ошибка! Ввод не может быть пустым")
         continue
-    url = f"http://127.0.0.1:8000/channels/{station_code}"
+    url = f"http://127.0.0.1:8001/channels/{station_code}"
 
     channels_status = input("Вывести только активные каналы? (да/нет(=пустой ввод)): ").lower()
     
