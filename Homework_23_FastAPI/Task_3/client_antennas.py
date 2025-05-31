@@ -5,7 +5,7 @@ antennas_list: list[dict] = []
 current_skip = 0
 current_limit = 10
 while len(antennas_list) < 50:
-    url = "http://127.0.0.1:8000/antennas/"
+    url = "http://127.0.0.1:8002/antennas/"
     params = {
         "skip": current_skip,
         "limit": current_limit
