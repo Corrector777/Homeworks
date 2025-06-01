@@ -19,7 +19,7 @@ import uvicorn
 # данные из некоего внутреннего хранилища, куда ты их "сохранил" в Задании 1):
 # Укажи response_model=SystemSummaryPublic в декораторе эндпоинта.
 # Функция-обработчик должна:
-# Принять данные о системе (либо как в Задании 1 через POST, либо, если
+# Принять данные о системе ( Betлибо как в Задании 1 через POST, либо, если
 # делаешь GET, представь, что ты извлекаешь ранее сохраненный
 # SystemStatusReport по имени системы).
 # Сформировать словарь или объект SystemSummaryPublic на основе
@@ -74,7 +74,7 @@ data = [
             "output_gw": 0.9,
             "coolant_temp_celsius": 850,
             "active_cells": 4
-        }
+        }   
     }
 ]
 
@@ -98,32 +98,42 @@ for system in data:
         system_report = SystemStatusReport(**system)
         validated_data[system["system_name"]] = system_report
     except ValidationError as e:
-        validated_data[system["system_name"]] = {'data': system, 'errors': e.errors()}
+        # невалидные данные(статус не валиден) не будут являться объектом SystemStatusReport(поэтому ниже в проверке будет ошибка
+        # с указанием невалидного статуса - для гибкости)
+        validated_data[system["system_name"]] = {'non_valid_data': system, 'errors': e.errors()}
 
+# print(system['system_name'])
 # print(system_report)
-# print(validated_data)
+print(validated_data)
     
 
 @app.get("/titan3/system_summary/{system_name}", response_model=SystemSummaryPublic)
 async def system_summary_public(system_name: str):
-    '''Функция принимает данные о системе из SystemStatusReport. Возвращает данные используя response_model=SystemSummaryPublic'''
+    '''Эта функция использует словарь validated_data(Pydantic модель) для поиска данных системы, соответствующих указанному system_name.
+      Она возвращает объект SystemSummaryPublic,
+      который включает system_id, current_status и, при необходимости, critical_reading для систем "Life Support Alpha".'''
+    print('Проверка', system_name)
     if system_name in validated_data:
         system_data = validated_data[system_name]
-        if hasattr(system_data, 'status') and system_data.status in ["nominal", "warning", "critical", "offline"]:
+        # если system_data является объектом Pydantic модели SystemStatusReport(имеет аттрибут), 
+        # то извлекаем его аттрибуты     
+        if hasattr(system_data, 'status'):
             current_status = system_data.status
-            if system_name == "Life Support Alpha" and "oxygen_level_percent" in system_data.details:
+            if system_data.details and system_data.system_name == "Life Support Alpha" and "oxygen_level_percent" in system_data.details:
                 critical_reading = f"Oxygen: {system_data.details['oxygen_level_percent']}%"
             else:
                 critical_reading = None
             return SystemSummaryPublic(
                 system_id=system_name,
                 current_status=current_status,
-                critical_reading=critical_reading
+                critical_reading=critical_reading,
             )
+        # Если system_data не является объектом Pydantic модели SystemStatusReport, а является словарем с невалидными данными,
+        # то возвращаем ошибку с указанием невалидного статуса
         else:
             raise HTTPException(status_code=400, detail="Status must be one of ['nominal', 'warning', 'critical', 'offline']")
     else:
-        raise HTTPException(status_code=404, detail="System not found")
+        raise HTTPException(status_code=404, detail="System not found ")
 
 if __name__ == "__main__":
-    uvicorn.run("task2:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("task2_get:app", host="127.0.0.1", port=8000, reload=True)
