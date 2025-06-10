@@ -67,7 +67,7 @@ async def send_system_status_report(report: SystemStatusReport):
     системы и возвращает словарь с сообщением об успешном получении данных'''
 
     print(f"Received status for {report.system_name}: {report.status}")
-    # try:      # пока закомментировано, так как решено определить локально полную базу без привязки к этому запросы во втором задании
+    # try:      # пока закомментировано, так как решено определить локально полную базу без привязки к этому запросу во втором задании
     #     with open("report.txt", "w") as f:
     #         json.dump(report.model_dump(), f)
     # except Exception as e:
