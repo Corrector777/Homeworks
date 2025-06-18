@@ -3,7 +3,7 @@ import fastapi
 
 app = fastapi.FastAPI()
 
-antennas_db = [{"id": i, "gain": f"{30+i*0.1} dBi"} for i in range(1, 51)]
+antennas_db = [{"id": i, "gain": f"{30+i*0.1} dBi"} for i in range(1, 55)]
 
 
 @app.get("/antennas/")

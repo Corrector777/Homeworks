@@ -4,7 +4,7 @@ from requests.exceptions import RequestException
 antennas_list: list[dict] = []
 current_skip = 0
 current_limit = 10
-while len(antennas_list) < 50:
+while True:
     url = "http://127.0.0.1:8002/antennas/"
     params = {
         "skip": current_skip,
@@ -12,11 +12,16 @@ while len(antennas_list) < 50:
     }
     try:
         response = requests.get(url, params=params)
-        response.raise_for_status()
-        antennas_list += response.json()["items"]
-        print(f'{current_limit} антенн от {current_skip + 1} до {current_skip + current_limit} добавлены:')
-        print(response.json(), "\n")
-        current_skip += current_limit
+        total = response.json()["total"]
+        items = response.json()["items"]
+        if len(antennas_list) < total:
+            response.raise_for_status()
+            antennas_list += items
+            print(f'{len(items)} антенн от {current_skip + 1} до {current_skip + len(items)} добавлены:')
+            print(response.json(), "\n")
+            current_skip += len(items)
+        else:
+            break
     except RequestException as err:
         print(f"Request error: {err}")
         if err.response is not None:

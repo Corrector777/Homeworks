@@ -1,7 +1,7 @@
 import requests
 from requests.exceptions import RequestException
 
-exit = {"нет", "no", 'н', 'n'}
+exit_set= {"нет", "no", 'н', 'n'}
 
 while True:
 
@@ -28,7 +28,7 @@ while True:
         case 'нет' | '':
             try:
                 print("\nВсе каналы")
-                response = requests.get(url, params={"active_only": False})
+                response = requests.get(url)
                 response.raise_for_status()
                 print(response.json())
             except RequestException as err:
@@ -39,6 +39,6 @@ while True:
         case _:
             print("Некорректный ввод")
     break_point = input('\nПродолжаем(нет/любой ввод = да)?\n')
-    if break_point in exit:
+    if break_point in exit_set:
         break
     

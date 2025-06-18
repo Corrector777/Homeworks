@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 import requests
 from requests.exceptions import RequestException
 
@@ -6,8 +6,7 @@ from requests.exceptions import RequestException
 url_1 = "http://127.0.0.1:8000/ping/Vega-11"
 url_2 = "http://127.0.0.1:8001/channels/Vega-11"
 params_2 = {
-    "active_only": True,
-    "details": True
+    "active_only": True
 }
 url_3 = "http://127.0.0.1:8002/antennas"
 params_3 = {
@@ -20,7 +19,7 @@ app = FastAPI()
 
 
 @app.get("/report")
-async def report():
+async def report(details: bool = Query(default=False)):
     pong = None
     channels = None
     antennas_total = None
@@ -51,12 +50,11 @@ async def report():
                 }
                 
     print(f'Данные для отчета: \n"pong": {pong}, {channels_status}: {channels}, "antennas_total": {antennas_total}')
-    if params_2["details"]:
+    if details:
         return {
                 'pong': pong,
-                channels_status: channels,
-                'antennas_total': response_3.json()["items"],
-                'all_channels': response_2.json()["channels"]
+                'antennas': response_3.json()["items"],
+                'channels': response_2.json()["channels"]
                 }
     else:
         return {

@@ -17,10 +17,11 @@ channels_db = [
 @app.get("/channels/{station_code}")
 async def channels(station_code: str, active_only: bool = False):
     if active_only:
-        channels = [{'id': channel["id"], 'freq': channel["freq"]} for channel in channels_db if channel["active"] is True]
-        return {"station": station_code, "channels": channels}
-    return {"station": station_code, "channels": [{'id': channel["id"], 'freq': channel["freq"]} for channel in channels_db]}
-
+        channels = [channel for channel in channels_db if channel["active"]]
+    else:
+        channels = channels_db
+    return {"station": station_code, "channels": channels}
+    
 if __name__ == "__main__":  
     uvicorn.run(app, host="127.0.0.1", port=8001)
 
